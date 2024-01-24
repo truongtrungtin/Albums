@@ -1,0 +1,179 @@
+[
+  {
+    "Name": "Adidas Running Shoes",
+    "Price": 120.00,
+    "Description": "High-quality running shoes for professionals",
+    "PictureUrl": "images/products/adidas_running_shoes.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "ASICS Tennis Racket",
+    "Price": 250.00,
+    "Description": "Advanced tennis racket for competitive players",
+    "PictureUrl": "images/products/asics_tennis_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 2
+  },
+  {
+    "Name": "Nike Football",
+    "Price": 75.00,
+    "Description": "Durable football for all weather conditions",
+    "PictureUrl": "images/products/nike_football.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 6
+  },
+  {
+    "Name": "Yonex Badminton Racket",
+    "Price": 180.00,
+    "Description": "Lightweight and powerful badminton racket",
+    "PictureUrl": "images/products/yonex_badminton_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 4
+  },
+  {
+    "Name": "Victor Kit Bag",
+    "Price": 100.00,
+    "Description": "Spacious kit bag with multiple compartments",
+    "PictureUrl": "images/products/victor_kit_bag.jpg",
+    "ProductTypeId": 4,
+    "ProductBrandId": 3
+  },
+  {
+    "Name": "Puma Indoor Shoes",
+    "Price": 85.00,
+    "Description": "Comfortable indoor shoes for sports and casual wear",
+    "PictureUrl": "images/products/puma_indoor_shoes.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 5
+  },
+  {
+    "Name": "Babolat Tennis Racket",
+    "Price": 210.00,
+    "Description": "High-performance tennis racket for professional play",
+    "PictureUrl": "images/products/babolat_tennis_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 7
+  },
+  {
+    "Name": "Adidas Football",
+    "Price": 60.00,
+    "Description": "Adidas branded football, suitable for all surfaces",
+    "PictureUrl": "images/products/adidas_football.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Nike Sports Kit Bag",
+    "Price": 120.00,
+    "Description": "Stylish and durable kit bag from Nike",
+    "PictureUrl": "images/products/nike_sports_kit_bag.jpg",
+    "ProductTypeId": 4,
+    "ProductBrandId": 6
+  },
+  {
+    "Name": "Yonex Indoor Shoes",
+    "Price": 95.00,
+    "Description": "Yonex indoor shoes, perfect for badminton and other indoor sports",
+    "PictureUrl": "images/products/yonex_indoor_shoes.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 4
+  },
+  {
+    "Name": "ASICS Running Shoes",
+    "Price": 110.00,
+    "Description": "Highly comfortable and durable running shoes by ASICS",
+    "PictureUrl": "images/products/asics_running_shoes.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 2
+  },
+  {
+    "Name": "Victor Badminton Racket",
+    "Price": 160.00,
+    "Description": "Premium quality badminton racket for advanced players",
+    "PictureUrl": "images/products/victor_badminton_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 3
+  },
+  {
+    "Name": "Puma Football",
+    "Price": 50.00,
+    "Description": "High-quality Puma football, great for league matches",
+    "PictureUrl": "images/products/puma_football.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 5
+  },
+  {
+    "Name": "Babolat Badminton Racket",
+    "Price": 170.00,
+    "Description": "Top-tier badminton racket preferred by professionals",
+    "PictureUrl": "images/products/babolat_badminton_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 7
+  },
+  {
+    "Name": "Adidas Kit Bag",
+    "Price": 90.00,
+    "Description": "Ergonomic and spacious kit bag from Adidas",
+    "PictureUrl": "images/products/adidas_kit_bag.jpg",
+    "ProductTypeId": 4,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Nike Running Shoes",
+    "Price": 130.00,
+    "Description": "Nike running shoes with enhanced cushioning and support",
+    "PictureUrl": "images/products/nike_running_shoes.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 6
+  },
+  {
+    "Name": "Puma Tennis Racket",
+    "Price": 200.00,
+    "Description": "Precision-engineered tennis racket by Puma",
+    "PictureUrl": "images/products/puma_tennis_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 5
+  },
+  {
+    "Name": "Victor Football",
+    "Price": 55.00,
+    "Description": "Victor football, ideal for training and recreational play",
+    "PictureUrl": "images/products/victor_football.jpg",
+    "ProductTypeId": 3,
+    "ProductBrandId": 3
+  },
+  {
+    "Name": "Yonex Sports Kit Bag",
+    "Price": 110.00,
+    "Description": "Yonex kit bag with ample space for all sports gear",
+    "PictureUrl": "images/products/yonex_sports_kit_bag.jpg",
+    "ProductTypeId": 4,
+    "ProductBrandId": 4
+  },
+  {
+    "Name": "Babolat Indoor Shoes",
+    "Price": 100.00,
+    "Description": "Stylish and comfortable indoor shoes from Babolat",
+    "PictureUrl": "images/products/babolat_indoor_shoes.jpg",
+    "ProductTypeId": 1,
+    "ProductBrandId": 7
+  },
+  {
+    "Name": "Adidas Tennis Racket",
+    "Price": 220.00,
+    "Description": "Pro-level tennis racket designed for top performance",
+    "PictureUrl": "images/products/adidas_tennis_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 1
+  },
+  {
+    "Name": "Nike Badminton Racket",
+    "Price": 150.00,
+    "Description": "Innovative badminton racket from Nike for all skill levels",
+    "PictureUrl": "images/products/nike_badminton_racket.jpg",
+    "ProductTypeId": 2,
+    "ProductBrandId": 6
+  }
+]
+

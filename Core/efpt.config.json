@@ -1,0 +1,189 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "EntityDataContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Core",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[Customer].[AddressModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Customer].[FileAttachmentModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Customer].[ProfileModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[BrandModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[CatalogModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[CatalogTypeModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[CompanyModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[DimDateModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[DistrictModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[ProductAttributeModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[ProvinceModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[StoreModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[MasterData].[WardModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[Account_Device_Mapping]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[AccountInRoleModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[AccountInStoreModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[AccountModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[EmployeeModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[FunctionModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[LoginLogModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[MenuModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[PageFunctionModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[PageModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[PagePermissionModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[RefreshToken]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Pms].[RolesModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[tMasterData].[NewsCategoryModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[tMasterData].[NewsModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[utilities].[ChangeDataLogModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[utilities].[NotificationAccountMappingModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[utilities].[NotificationModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Warehouse].[Product_Attribute_Mapping]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Warehouse].[Product_Catalog_Mapping]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Warehouse].[Product_Images_Mapping]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Warehouse].[ProductCategoryModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Warehouse].[ProductModel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Warehouse].[StockModel]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "tintruong.albums_db.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
