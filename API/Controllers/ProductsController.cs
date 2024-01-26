@@ -7,6 +7,7 @@ using Infrastructure.Data.Specifications;
 using Infrastructure.Data.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Data.Library;
+using StackExchange.Redis;
 
 namespace API.Controllers;
 [Route("api/v1/[controller]")]
@@ -160,7 +161,7 @@ public class ProductsController : BaseController
 
             var spec = new ProductWithTypesAndBrandSpecification(sort, type, skip, pageSize);
             var products = await _productRepository.ListAsync(spec);
-            var data = new ProductViewModel[] { };
+            var data = new List<ProductViewModel> { };
 
             if (products != null && products.Count() > 0)
             {
@@ -168,10 +169,7 @@ public class ProductsController : BaseController
                 {
 
                     #region Images
-                    var images = (from p in _context.Product_Images_Mapping
-                                  join f in _context.FileAttachmentModel on p.FileAttachmentId equals f.FileAttachmentId
-                                  where p.ProductId == item.ProductId && f.ObjectId == item.ProductId
-                                  select f.FileUrl).ToList();
+                    item.Image = Path.Combine(_hostingEnvironment.ContentRootPath, "Upload/" + item.Image);
                     //item.Image = images;
 
                     //var imgs = _context.FileAttachmentModel.Where(x => x.ObjectId == item.Id).ToList();
@@ -185,11 +183,13 @@ public class ProductsController : BaseController
                     //    item.Image = "/Images/product.jfif";
                     //}
                     #endregion
-                    data.Append(new ProductViewModel
+                    data.Add(new ProductViewModel
                     {
                         ProductId = item.ProductId,
                         Name = item.ProductName,
                         url = item.Image,
+                        productType = item.UPC,
+                        size = item.Quantity
                     });
                 }
 
@@ -202,7 +202,7 @@ public class ProductsController : BaseController
             {
                 code = 200,
                 isSuccess = true,
-                data = data,
+                data = pagination,
             });
         }
         catch (Exception ex)

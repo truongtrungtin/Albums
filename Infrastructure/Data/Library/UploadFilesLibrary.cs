@@ -11,8 +11,6 @@ namespace Infrastructure.Data.Library
     public interface IUploadFilesLibrary
     {
         Task<string> UploadFile(IFormFile file, string folder, int minWidth = 300, int maxWidth = 1600, int minHeight = 300, int maxHeight = 1600, string FileType = null);
-        //(string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory);
-        //string SizeConverter(long bytes);
         (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory);
     }
     public class UploadFilesLibrary : IUploadFilesLibrary
@@ -58,7 +56,7 @@ namespace Infrastructure.Data.Library
                     //Đổi tên lại thành chuỗi phân biệt tránh trùng
                     filename = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + filename;
                     //folder path
-                    var existPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Upload/" + folder);
+                    var existPath = Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot/Upload/" + folder);
                     Directory.CreateDirectory(existPath);
 
                     //file path

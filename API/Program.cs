@@ -15,6 +15,7 @@ using StackExchange.Redis;
 using Infrastructure.Data.Extensions;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,6 +136,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 app.UseCors("AllowAngularApp");
 app.UseExceptionMiddleware();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 // Map controllers for handling HTTP requests.

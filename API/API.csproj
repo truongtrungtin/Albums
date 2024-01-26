@@ -35,4 +35,11 @@
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\Upload\Product\2024-01-24T21-39-06puma_indoor_shoes.jpg" />
+      <None Include="wwwroot\Upload\Product\2024-01-24T21-40-05nike_football.jpg" />
+      <None Include="wwwroot\Upload\Product\2024-01-24T21-40-05victor_kit_bag.jpg" />
+      <None Include="wwwroot\Upload\Product\2024-01-24T21-40-05yonex_badminton_racket.jpg" />
+    </ItemGroup>
+
 </Project>
