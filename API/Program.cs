@@ -28,7 +28,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 
-
 // Database context for the main application.
 builder.Services.AddDbContext<EntityDataContext>(opt =>
 {
@@ -112,6 +111,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
 
 var app = builder.Build();
 

@@ -54,6 +54,10 @@ namespace Infrastructure.Middlewares
         public static void AddCustomServices(this IServiceCollection services)
         {
 
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = null; // No limit on request body size
+            });
         }
     }
 }

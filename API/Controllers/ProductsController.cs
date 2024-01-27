@@ -28,6 +28,7 @@ public class ProductsController : BaseController
 
     // POST: api/v1/products
     [HttpPost]
+    [DisableRequestSizeLimit]
     public async Task<ActionResult> CreateProduct(IList<IFormFile> files)
     {
 
