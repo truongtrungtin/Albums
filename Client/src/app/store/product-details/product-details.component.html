@@ -1,0 +1,59 @@
+<div *ngIf="product; else loadingOrError" class="container py-5">
+    <div class="row">
+        <!-- Product Image with Carousel -->
+        <div class="col-lg-6 mb-4">
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner rounded shadow">
+                    <!-- Example for multiple images, you can loop through product images -->
+                    <div class="carousel-item active">
+                        <img [src]="'assets/images/products/' + extractImageName()" class="d-block w-100" alt="{{product.name}}">
+                    </div>
+                    <!-- Additional carousel items here -->
+                </div>
+                <a class="carousel-control-prev" href="#productCarousel" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#productCarousel" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Product Details inside a Card -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0">
+                <div class="card-body">
+                    <h2 class="card-title">{{product.name}}</h2>
+                    <p class="card-subtitle mb-2 text-muted">{{product.productBrand}} - {{product.productType}}</p>
+                    <h3 class="my-3">{{product.price | currency: 'USD'}}</h3>
+                    <p class="card-text">{{product.description}}</p>
+
+                    <!-- Quantity Control -->
+                    <div class="d-flex align-items-center my-4">
+                        <button class="btn btn-outline-secondary btn-sm" (click)="decrementQuantity()">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <input type="number" class="form-control mx-2" style="width: 60px;" [(ngModel)]="quantity">
+                        <button class="btn btn-outline-secondary btn-sm" (click)="incrementQuantity()">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button class="btn btn-primary btn-lg" (click)="addItemToBasket()"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Additional information or related products can go here -->
+</div>
+
+<!-- Loading or Error Placeholder -->
+<ng-template #loadingOrError>
+    <div class="text-center my-5">
+        <p>Loading product details...</p>
+        <!-- You can add a spinner or error message here -->
+    </div>
+</ng-template>

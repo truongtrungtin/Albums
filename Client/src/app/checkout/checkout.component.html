@@ -1,0 +1,36 @@
+<div class="container mt-3">
+    <div class="row">
+        <!-- Left side with tabs for address, shipment, and review -->
+        <div class="col-md-8">
+            <ul class="nav nav-pills mb-3">
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="currentStep === 'address'"
+                        (click)="setCurrentStep('address')">Address</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="currentStep === 'shipment'"
+                        (click)="setCurrentStep('shipment')">Shipment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="currentStep === 'review'"
+                        (click)="setCurrentStep('review')">Review</a>
+                </li>
+            </ul>
+            <div *ngIf="currentStep === 'address'">
+                <app-address></app-address>
+            </div>
+            <div *ngIf="currentStep === 'shipment'">
+                <app-shipment></app-shipment>
+            </div>
+            <div *ngIf="currentStep === 'review'">
+                <app-review></app-review>
+            </div>
+        </div>
+        <!-- Right side with app-order-totals -->
+        <div class="col-md-4">
+            <app-order-totals></app-order-totals>
+            <!-- Add your checkout button or other content here -->
+        
+        </div>
+    </div>
+</div>

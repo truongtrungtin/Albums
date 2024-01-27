@@ -1,0 +1,12 @@
+<header class="text-center">
+    <span *ngIf="totalItems && totalItems > 0">
+      Showing 
+      <strong>
+        {{(pageNumber - 1) * pageSize+1}}
+        -
+        {{pageNumber * pageSize > totalItems ? totalItems : pageNumber * pageSize}}
+      </strong> of 
+      <strong>{{totalItems}}</strong> results
+    </span>
+    <span *ngIf="totalItems === 0">There are  <strong>0</strong> result</span>
+  </header>

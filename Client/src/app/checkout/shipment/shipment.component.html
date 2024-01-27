@@ -1,0 +1,27 @@
+<!-- shipment.component.html -->
+<div class="container">
+    <h3>Select Delivery Method</h3>
+    <div class="row">
+        <div class="col-md-6 col-sm-12" *ngFor="let option of deliveryOptions">
+            <div class="card mb-3">
+                <!-- <img src="" alt="{{ option.name }}" class="card-img-top"> -->
+                <div class="card-body">
+                    <h5 class="card-title">{{ option.name }}</h5>
+                    <p class="text-muted"> {{ option.description }}</p>
+                    <p class="card-text">
+                        <strong>Delivery Time:</strong> {{ option.deliveryTime }} <br />
+                        <strong>Price:</strong> {{ option.price | currency: 'USD' }}
+                    </p>
+                    <input type="radio" class="form-check-input" [id]="'deliveryOption' + option.id"
+                        [name]="'deliveryOption'" [value]="option.id" (change)="updateShipmentPrice()"
+                        [(ngModel)]="selectedOption" />
+                    <label class="form-check-label ps-2" [for]="'deliveryOption' + option.id">Select</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="onNextClick()">
+        <i class="fa fa-arrow-right"></i> 
+        Next
+      </button>
+</div>

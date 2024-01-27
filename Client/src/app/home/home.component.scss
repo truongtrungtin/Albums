@@ -1,0 +1,33 @@
+/* Home Component Styles */
+.container {
+    max-width: 1200px;
+  }
+  
+  /* Hero Section Styles */
+  section:first-of-type {
+    background-color: #f8f9fa;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Features Section Styles */
+  section:nth-of-type(2) {
+    h3 {
+      margin-top: 20px;
+      color: #007bff;
+    }
+  }
+  
+  /* Call to Action Styles */
+  section:last-of-type {
+    background-color: #e9ecef;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-primary, .btn-success {
+    width: 200px;
+  }
+  

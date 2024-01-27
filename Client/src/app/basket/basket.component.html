@@ -1,0 +1,55 @@
+<div class="container mt-4" *ngIf="basket">
+    <h2 class="mb-4">Shopping Cart</h2>
+    <div *ngIf="!basket.items || basket.items.length === 0" class="text-center">
+        <h4>Your Cart is Empty</h4>
+        <p>Explore our products and start adding items to your cart!</p>
+    </div>
+    <div class="table-reponsitory" *ngIf="(basketService.basketSubject$ | async) as basket">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col" style="width: 40%;">Product</th>
+                    <th scope="col" class="text-center" style="width: 10%;">Quantity</th>
+                    <th scope="col" class="text-center" style="width: 10%;">Price</th>
+                    <th scope="col" class="text-center" style="width: 10%;">Total</th>
+                    <th scope="col" class="text-center" style="width: 10%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of basket.items">
+                    <td>
+                        <img [src]="'assets/images/products/' + extractImageName(item)" alt="{{ item.productName }}"
+                            class="img-fluid" style="max-width: 100px;">
+                    </td>
+                    <td>
+                        <h5 routerLink="/store/{{item.id}}">{{ item.productName }}</h5>
+                        <p class="text-muted">{{ item.productBrand }} - {{ item.productType }}</p>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-secondary" type="button"
+                        (click)="basketService.decrementQuantity(item)">-</button>
+                    {{item.quantity}}
+                    <button class="btn btn-outline-secondary" type="button"
+                        (click)="basketService.incrementQuantity(item)">+</button>
+                    </td>
+                    <td class="text-end">{{ item.price | currency: "USD" }}</td>
+                    <td class="text-end">{{ item.quantity * item.price | currency: "USD"  }}</td>
+                    <td class="text-center">
+                        <button class="btn btn-danger" (click)="basketService.removeItem(item)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-6 offset-8">
+                <app-order-totals *ngIf="basket && basket.items && basket.items.length > 0"></app-order-totals>
+                <button class="btn btn-success mt-3" routerLink="/checkout"  *ngIf="basket && basket.items && basket.items.length > 0">
+                    <i class="fa fa-shopping-cart"></i> Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

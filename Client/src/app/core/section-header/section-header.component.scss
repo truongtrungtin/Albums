@@ -1,0 +1,15 @@
+.breadcrumb {
+    a {
+      color: #007bff;
+      &:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
+    }
+  
+    .active {
+      color: #6c757d;
+      font-weight: 500;
+    }
+  }
+  

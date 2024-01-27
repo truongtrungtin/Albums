@@ -1,0 +1,78 @@
+<div class="container mt-3">
+  <div class="row">
+
+    <!-- Sidebar for Filters -->
+    <div class="col-md-3">
+      <h5 class="text-primary ml-3 mt-4 mb-2">Sort</h5> <!-- Changed to h5 for better hierarchy -->
+      <select class="form-select" style="width: auto;" [(ngModel)]="params.sort" (change)="applySort()">
+        <option value="MonthAsc">Month Ascending</option>
+        <option value="MonthDesc">Name Descending</option>
+      </select>
+
+      <!-- Types Filter -->
+      <h5 class="text-primary ml-3">Types</h5> <!-- Changed to h5 for better hierarchy -->
+      <ul class="list-group my-3">
+        <li class="list-group-item  list-group-item-action" *ngFor="let type of params.types"
+          [class.selected]=" type.id === params.selectedType?.id" (click)="selectType(type)">
+          {{ type.name }}
+        </li>
+      </ul>
+    </div>
+    <!-- Main Area for Products -->
+    <section class="col-md-9 ">
+      <div class="col-md-12 text-center mt-3">
+      </div>
+      <div class="d-flex justify-content-between align-items-center pb-2">
+        <div class="d-flex justify-content-center align-items-center">
+          <app-pagination-header [totalItems]="params.totalItems" [pageNumber]="params.page"
+            [pageSize]="params.pageSize"></app-pagination-header>
+        </div>
+        <div class="d-flex m-2">
+          <button type="button" class="btn btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#myModal">
+            <i class="fa fa-upload" aria-hidden="true"></i> Upload
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 mb-4 mb-lg-0 mh-25 d-flex align-items-center" *ngFor="let product of params.products">
+          <app-product-item [product]="product"></app-product-item>
+        </div>
+      </div>
+      
+      
+      <!-- Gallery -->
+      <div class="d-flex justify-content-center">
+        <app-pagination [totalItems]="params.totalItems" [pageSize]="params.pageSize"
+          (pageChanged)="onPageChanged($event)"></app-pagination>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- app-store.component.html -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <form (ngSubmit)="onSubmitFormUpload()" #uploadForm="ngForm">
+
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Upload Files</h5>
+          <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Include a form with your custom dropzone component -->
+          <app-product-upload></app-product-upload>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+
+          <!-- Change the button type to submit to trigger ngSubmit -->
+        </div>
+
+      </div>
+
+    </div>
+  </form>
+</div>

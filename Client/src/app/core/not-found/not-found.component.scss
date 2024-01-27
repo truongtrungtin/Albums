@@ -1,0 +1,27 @@
+.not-found-page {
+    height: 100vh;
+    background: #f8f9fa;
+    color: #333;
+  
+    h1 {
+      font-size: 6rem;
+      color: #6c757d; // Grey color for a softer look
+    }
+  
+    h2 {
+      color: #343a40; // Darker shade for text
+    }
+  
+    p.lead {
+      color: #555;
+    }
+  
+    a.btn {
+      color: #fff;
+      &:hover {
+        color: #fff;
+        background-color: darken(#007bff, 10%);
+      }
+    }
+  }
+  

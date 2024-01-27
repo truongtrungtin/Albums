@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="mb-3">
+          <label for="Fname" class="form-label">
+            <i class="fa fa-user"></i> First Name
+          </label>
+          <input matInput type="text" class="form-control" id="Fname" formControlName="Fname">
+          <mat-error *ngIf="hasError('Fname', 'required')" class="text-danger">First Name is required.</mat-error>
+        </div>
+
+        <div class="mb-3">
+          <label for="Lname" class="form-label">
+            <i class="fa fa-user"></i> Last Name
+          </label>
+          <input matInput type="text" class="form-control" id="Lname" formControlName="Lname">
+          <mat-error *ngIf="hasError('Lname', 'required')" class="text-danger">Last Name is required.</mat-error>
+        </div>
+
+        <div class="mb-3">
+          <label for="Street" class="form-label">
+            <i class="fa fa-road"></i> Street
+          </label>
+          <input matInput type="text" class="form-control" id="Street" formControlName="Street">
+          <mat-error *ngIf="hasError('Street', 'required')" class="text-danger">Street is required.</mat-error>
+        </div>
+
+        <div class="mb-3">
+          <label for="City" class="form-label">
+            <i class="fa fa-building"></i> City
+          </label>
+          <input matInput type="text" class="form-control" id="City" formControlName="City">
+          <mat-error *ngIf="hasError('City', 'required')" class="text-danger">City is required.</mat-error>
+        </div>
+
+        <div class="mb-3">
+          <label for="State" class="form-label">
+            <i class="fa fa-map-marker"></i> State
+          </label>
+          <input matInput type="text" class="form-control" id="State" formControlName="State">
+          <mat-error *ngIf="hasError('State', 'required')" class="text-danger">State is required.</mat-error>
+        </div>
+
+        <div class="mb-3">
+          <label for="ZipCode" class="form-label">
+            <i class="fa fa-map-pin"></i> ZIP Code
+          </label>
+          <input matInput type="text" class="form-control" id="ZipCode" formControlName="ZipCode">
+          <mat-error *ngIf="hasError('ZipCode', 'required')" class="text-danger">ZIP Code is required.</mat-error>
+          <mat-error *ngIf="hasError('ZipCode', 'pattern')" class="text-danger">Invalid ZIP code.</mat-error>
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="onNextClick()" [disabled]="!addressForm.valid">
+          <i class="fa fa-arrow-right"></i> 
+          Next
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

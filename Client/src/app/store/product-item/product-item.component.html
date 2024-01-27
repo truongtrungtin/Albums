@@ -1,0 +1,43 @@
+<!-- product-item.component.html -->
+<!-- Check if the item is an image -->
+<ng-container *ngIf="product && (isImage() || isVideo())">
+  <ng-container *ngIf="isImage()">
+    <button type="button" class="btn" data-bs-toggle="modal" [attr.data-bs-target]="'#modal_' + product.productId">
+      <img [src]="'https://albums-tt.ddns.net/Upload/Product/' + extractImageName()" [alt]="product.name"
+        class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+      <div class="image-icons">
+        <i class="fa fa-info-circle" (click)="showImageInfo()"></i>
+        <i class="fa fa-download" (click)="downloadFile()" title="Download Image"></i>
+      </div>
+    </button>
+    <div class="modal fade" [attr.id]="'modal_' + product.productId" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Image</h5>
+            <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body mh-50">
+            <img [src]="'https://albums-tt.ddns.net/Upload/Product/'+ extractImageName()" [alt]="product.name"
+              class="w-100 shadow-1-strong rounded mb-4" alt="Boat on Calm Water" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"> <i class="fa fa-trash"
+                title="Delete Image"></i></button>
+            <button type="submit" class="btn btn-primary" (click)="downloadFile()"> <i class="fa fa-download"
+                title="Download Image"></i>
+            </button>
+            <!-- Change the button type to submit to trigger ngSubmit -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isVideo()">
+    <video>
+        <source [src]="'https://albums-tt.ddns.net/Upload/Product/' + extractImageName()" type="video/mp4">
+      </video>
+  </ng-container>
+</ng-container>

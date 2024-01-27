@@ -1,0 +1,29 @@
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar-brand{
+    font-weight: bold;
+}
+
+.navbar-nav .nav-item{
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link{
+    color: #333;
+}
+
+.navbar-nav .nav-link .fa{
+    margin-right: 5px;
+}
+
+.nav-item.active {
+    // Example style for active state
+    background-color: #f8f9fa; // Light grey background for active item
+    a {
+      color: #007bff; // Change link color for active state
+    }
+  }
+  

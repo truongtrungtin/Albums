@@ -1,0 +1,28 @@
+/* product-item.component.scss */
+
+.image-icons, .video-icons {
+    position: absolute;
+    top: 10px;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .image-icons {
+    left: 10px;
+  }
+  
+  .video-icons {
+    right: 10px;
+  }
+  
+  .image-icons i,
+  .video-icons i {
+    margin: 0 5px;
+    font-size: 20px;
+  }
+  
+  .image-icons i:hover,
+  .video-icons i:hover {
+    color: #ff9900;
+  }
+

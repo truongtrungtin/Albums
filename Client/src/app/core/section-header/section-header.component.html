@@ -1,0 +1,15 @@
+<ng-container *ngIf="showHeader && breadcrumbs[breadcrumbs.length-1]">
+    <section class="py-3" style="background-color: #f9f6f6;">
+      <div class="container">
+        <div class="row d-flex align-items-center">
+          <div class="col-md-9">
+            <h2 class="mb-1 mt-1">{{breadcrumbs[breadcrumbs.length-1].label}}</h2>
+          </div>
+          <div class="col-md-3">
+            <xng-breadcrumb></xng-breadcrumb>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+  
