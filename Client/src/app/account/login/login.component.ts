@@ -41,7 +41,7 @@ export class LoginComponent {
           this.loadingService.idle();
   
           // Get the returnUrl from the service and navigate accordingly
-          const returnUrl = this.accountService.redirectUrl ? this.accountService.redirectUrl : '/store';
+          const returnUrl = this.accountService.redirectUrl ? this.accountService.redirectUrl : '/gallery';
           this.router.navigateByUrl(returnUrl);
           this.accountService.redirectUrl = null;
         },

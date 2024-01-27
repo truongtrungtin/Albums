@@ -73,7 +73,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policyBuilder =>
     {
-        policyBuilder.WithOrigins("http://localhost:4200", "https://localhost:4200") // Replace with the actual Angular app URLs
+        policyBuilder.WithOrigins("https://albums-tt.ddns.net", "http://albums-tt.ddns.net") // Replace with the actual Angular app URLs
            .AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
     });
 });

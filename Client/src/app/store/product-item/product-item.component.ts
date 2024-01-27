@@ -3,8 +3,6 @@
 import { Component, Input, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { BasketService } from 'src/app/basket/basket.service';
 import { Product } from 'src/app/shared/models/Product';
-import videojs from 'video.js';
-import Player from "video.js/dist/types/player";
 
 @Component({
   selector: 'app-product-item',
@@ -44,7 +42,7 @@ export class ProductItemComponent {
   }
 
   private isVideoType(type: string): boolean {
-    const videoExtensions = ['hevc', 'video/mp4', 'mov']; // Added 'mov' for MOV files
+    const videoExtensions = ['hevc', 'video/mp4', 'mov', 'video/quicktime']; // Added 'mov' for MOV files
     return videoExtensions.includes(type.toLowerCase());
   }
   downloadFile() {

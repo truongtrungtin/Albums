@@ -10,11 +10,11 @@ import { ApiResponse } from '../shared/models/ApiResponse';
   providedIn: 'root',
 })
 export class StoreService {
-  // private apiUrl = 'https://albums-tt.ddns.net/api/v1';
-  private apiUrl = 'https://localhost:7272/api/v1';
+  private apiUrl = 'https://api-albums.ddns.net/api/v1';
+  // private apiUrl = 'https://localhost:7272/api/v1';
 
   // Inject HttpClient for making HTTP requests
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   // Fetches products with optional filtering, sorting, and pagination
   getProducts(
     storeParams: StoreParams

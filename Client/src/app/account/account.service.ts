@@ -10,14 +10,14 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 })
 export class AccountService {
 
-  // private apiUrl = 'https://albums-tt.ddns.net/api/Account/';
-  private apiUrl = 'https://localhost:7272/api/Account/';
+  private apiUrl = 'https://api-albums.ddns.net/api/Account/';
+  // private apiUrl = 'https://localhost:7272/api/Account/';
 
   private userSource = new BehaviorSubject<User | null>(null);
   userSource$ = this.userSource.asObservable();
   redirectUrl: string | null = null;
 
-  constructor(private http: HttpClient, private toastr: ToastrService) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) { }
 
   // Method to perform user login
   login(loginModel: any): Observable<User> {
@@ -92,19 +92,19 @@ export class AccountService {
   }
 
   // Method to get user details from localStorage
-  
 
-  loadUser(token: string){
+
+  loadUser(token: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
-    return this.http.get<any>(`${this.apiUrl}`, {headers}).pipe(
+    return this.http.get<any>(`${this.apiUrl}`, { headers }).pipe(
       map((response) => {
         this.setUser(response.data);
         return response.data;
       }),
       catchError((error) => {
-        this.toastr.error('Error loading user',error);
-  
+        this.toastr.error('Error loading user', error);
+
         // Rethrow the error to propagate it to the caller
         return throwError(() => error);
       })
@@ -117,6 +117,4 @@ export class AccountService {
     const token = localStorage.getItem('token');
     return !!token; // Returns true if token exists, indicating the user is authenticated
   }
-
- 
 }

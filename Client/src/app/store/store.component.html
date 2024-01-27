@@ -3,20 +3,20 @@
 
     <!-- Sidebar for Filters -->
     <div class="col-md-3">
-      <h5 class="text-primary ml-3 mt-4 mb-2">Sort</h5> <!-- Changed to h5 for better hierarchy -->
-      <select class="form-select" style="width: auto;" [(ngModel)]="params.sort" (change)="applySort()">
+      <!-- <h5 class="text-primary ml-3 mt-4 mb-2">Sort</h5>  -->
+      <!-- Changed to h5 for better hierarchy -->
+      <!-- <select class="form-select" style="width: auto;" [(ngModel)]="params.sort" (change)="applySort()">
         <option value="MonthAsc">Month Ascending</option>
         <option value="MonthDesc">Name Descending</option>
-      </select>
+      </select> -->
 
-      <!-- Types Filter -->
-      <h5 class="text-primary ml-3">Types</h5> <!-- Changed to h5 for better hierarchy -->
-      <ul class="list-group my-3">
+      <!-- <h5 class="text-primary ml-3">Types</h5>  -->
+      <!-- <ul class="list-group my-3">
         <li class="list-group-item  list-group-item-action" *ngFor="let type of params.types"
           [class.selected]=" type.id === params.selectedType?.id" (click)="selectType(type)">
           {{ type.name }}
         </li>
-      </ul>
+      </ul> -->
     </div>
     <!-- Main Area for Products -->
     <section class="col-md-9 ">
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-3 mb-4 mb-lg-0 mh-25 d-flex align-items-center" *ngFor="let product of params.products">
+        <div class="col-lg-3 col-4 mb-4 mb-lg-0 mh-25 d-flex align-items-center" *ngFor="let product of params.products">
           <app-product-item [product]="product"></app-product-item>
         </div>
       </div>
