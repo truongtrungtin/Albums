@@ -8,6 +8,7 @@ using Infrastructure.Data.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Data.Library;
 using StackExchange.Redis;
+using System.Security.Claims;
 
 namespace API.Controllers;
 [Route("api/v1/[controller]")]
@@ -16,7 +17,7 @@ namespace API.Controllers;
 public class ProductsController : BaseController
 {
     private readonly IRepository<ProductModel> _productRepository;
-
+    private Guid? _currentUser;
 
     public ProductsController(
         Microsoft.Extensions.Hosting.IHostingEnvironment hostingEnvironment,
@@ -29,29 +30,42 @@ public class ProductsController : BaseController
     // POST: api/v1/products
     [HttpPost]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> CreateProduct(IList<IFormFile> files)
+    public async Task<ActionResult> CreateProduct([FromBody] CreateProduct createProduct)
     {
 
         try
         {
-            //var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            this._currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
+            createProduct.File.Content = createProduct.File.Content.Replace('-', '+').Replace('_', '/');
 
-            // Map DTO to the Product entity[[
-            foreach (var item in files)
+            byte[] fileContent = Convert.FromBase64String(createProduct.File.Content.Trim());
+
+
+            // Create an in-memory IFormFile
+            var file = new FormFile(new MemoryStream(fileContent), 0, fileContent.Length, "file", createProduct.File.Name)
             {
-                var product = new ProductModel()
-                {
-                    ProductId = Guid.NewGuid(),
-                    ProductName = item.FileName,
-                    UPC = item.ContentType,
-                    Quantity = item.Length,
-                };
-                product.Image = await new UploadFilesLibrary(_hostingEnvironment, new JwtSettings())
-                    .UploadFile(item,"Product");
+                Headers = new HeaderDictionary(),
+                ContentType = createProduct.File.Type
+            };
+            // Map DTO to the Product entity[[
+            //foreach (var item in files)
+            //{
+            var product = new ProductModel()
+            {
+                ProductId = Guid.NewGuid(),
+                ProductName = createProduct.File.Name,
+                UPC = createProduct.File.Type,
+                Quantity = createProduct.File.Size,
+                CreateBy = _currentUser,
+                CreateTime = DateTime.UtcNow,
+                
+            };
+            product.Image = await new UploadFilesLibrary(_hostingEnvironment, new JwtSettings())
+                .UploadFile(file, "Product");
 
-                await _productRepository.AddAsync(product);
+            await _productRepository.AddAsync(product);
 
-            }
+            //}
 
 
             // Return the created product
@@ -59,7 +73,6 @@ public class ProductsController : BaseController
             {
                 code = 200,
                 isSuccess = true,
-                data = files,
             });
         }
         catch (Exception ex)
@@ -223,7 +236,6 @@ public class ProductsController : BaseController
         var product = await _productRepository.GetByIdAsync(spec);
         return Ok(product);
     }
-
 
     //[HttpGet("types")]
     //public async Task<ActionResult<IEnumerable<ProductCategoryModel>>> GetProductTypes()

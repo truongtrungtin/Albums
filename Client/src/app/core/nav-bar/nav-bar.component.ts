@@ -31,9 +31,19 @@ export class NavBarComponent {
       this.router.navigate(['/']); 
     }
 
-    triggerChangeDetection(){
-      this.cdr.detectChanges();
-    }
+    // triggerChangeDetection(){
+    //   this.cdr.detectChanges();
+    // }
 
+    collapseNavbar() {
+      const navbar = document.getElementById('navbarNav');
+      
+      // Check if navbar is not null before attempting to manipulate it
+      if (navbar !== null) {
+        if (navbar.classList.contains('show')) {
+          navbar.classList.remove('show');
+        }
+      }
+    }
     
 }

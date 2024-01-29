@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 import { ConnectionRefusedComponent } from './core/connection-refused/connection-refused.component';
+import { UnauthorizedComponent } from './core/unauthorized/unauthorized.component';
 
 const routes: Routes = [
   {path: '', component:HomeComponent, data: { breadcrumb: 'Home' }},
@@ -15,6 +16,7 @@ const routes: Routes = [
   // {path: 'checkout', loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule), data: { breadcrumb: 'Checkout' }},
   {path: '404', component:NotFoundComponent, data: { breadcrumb: 'Not Found' }},
   {path: '500', component:ServerErrorComponent, data: { breadcrumb: 'Server error' }},
+  {path: '401', component:UnauthorizedComponent, data: { breadcrumb: 'Unauthorized' }},
   {path: 'connection-error', component:ConnectionRefusedComponent, data: { breadcrumb: 'Connection Error' }},
 
   {path: '**', component: NotFoundComponent, pathMatch:'full'}

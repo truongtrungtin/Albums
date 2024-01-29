@@ -7,6 +7,8 @@ using AutoMapper;
 using Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Infrastructure.Data.Models
 {
@@ -22,7 +24,6 @@ namespace Infrastructure.Data.Models
         {
             this._context = new EntityDataContext();
             this._unitOfWork = new UnitOfWork(_context, new JwtSettings());
-
         }
 
     }

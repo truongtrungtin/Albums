@@ -23,7 +23,7 @@ export class SectionHeaderComponent {
   }
 
   // Inside your Component class
-  excludedRoutes: string[] = ['/basket', '/checkout/address', '/'];
+  excludedRoutes: string[] = ['/basket', '/checkout/address', '/', '/account/login', '/account/register'];
 
   checkCurrentRoute(): void {
     // Get the current route

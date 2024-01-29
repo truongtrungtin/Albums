@@ -58,6 +58,7 @@ namespace Infrastructure.Middlewares
             {
                 options.MaxRequestBodySize = null; // No limit on request body size
             });
+            services.AddControllers().AddNewtonsoftJson();
         }
     }
 }

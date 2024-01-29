@@ -16,6 +16,7 @@ public class AccountController : BaseController
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ApplicationIdentityDbContext _dbContext;
     private readonly ITokenGenerationService _tokenGenerationService;
+    private Guid? _currentUser;
 
     public AccountController(
         IMapper mapper,
@@ -35,8 +36,8 @@ public class AccountController : BaseController
     [HttpGet]
     public async Task<ActionResult<UserDTO>> LoadUser()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = await _userManager.FindByIdAsync(userId);
+        this._currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        var user = await _userManager.FindByIdAsync(_currentUser?.ToString());
 
         if (user == null)
         {

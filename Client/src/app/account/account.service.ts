@@ -10,8 +10,9 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 })
 export class AccountService {
 
-  private apiUrl = 'https://api-albums.ddns.net/api/Account/';
+  // private apiUrl = 'https://api-albums.ddns.net/api/Account/';
   // private apiUrl = 'https://localhost:7272/api/Account/';
+  private apiUrl = 'http://localhost:5193/api/Account/';
 
   private userSource = new BehaviorSubject<User | null>(null);
   userSource$ = this.userSource.asObservable();
@@ -103,10 +104,10 @@ export class AccountService {
         return response.data;
       }),
       catchError((error) => {
-        this.toastr.error('Error loading user', error);
-
         // Rethrow the error to propagate it to the caller
-        return throwError(() => error);
+        return throwError(() => {
+          this.toastr.error(error.statusText,'Error loading user');
+        });
       })
     );
   }

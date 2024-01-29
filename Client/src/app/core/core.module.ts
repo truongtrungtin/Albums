@@ -8,6 +8,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ConnectionRefusedComponent } from './connection-refused/connection-refused.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
 import { BreadcrumbModule } from 'xng-breadcrumb';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 
 
@@ -17,6 +18,7 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
     NotFoundComponent,
     ServerErrorComponent,
     ConnectionRefusedComponent,
+    UnauthorizedComponent,
     SectionHeaderComponent
   ],
   imports: [
@@ -33,6 +35,7 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
     NotFoundComponent,
     ServerErrorComponent,
     ConnectionRefusedComponent,
+    UnauthorizedComponent,
     SectionHeaderComponent
   ]
 })

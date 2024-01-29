@@ -35,7 +35,6 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.loadingService.loading();
-  
       this.accountService.login(this.loginForm.value).subscribe({
         next: () => {
           this.loadingService.idle();

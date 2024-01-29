@@ -6,7 +6,13 @@ import { StoreParams } from '../shared/models/storeParams';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { ToastrService } from 'ngx-toastr';
 import { ProductUploadComponent } from './product-upload/product-upload.component';
-import { HttpClient } from '@angular/common/http';
+import * as exifr from 'exifr';
+import { LocationImage } from '../shared/models/locationImage';
+import { Product } from '../shared/models/Product';
+import { CreateProduct } from '../shared/models/createProduct';
+import { FileDetails, fileToJson } from '../shared/models/fileJson';
+import { LoadingService } from '../core/services/loading.service';
+
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
@@ -19,12 +25,14 @@ export class StoreComponent implements OnInit {
 
   // Store-related data
   params: StoreParams = new StoreParams();
-  
+
   // Injecting StoreService for data fetching
   constructor(
-    private storeService: StoreService, 
+    private storeService: StoreService,
     private toastr: ToastrService,
-    ) {}
+    private loadingService: LoadingService,
+
+  ) { }
 
   ngOnInit() {
     this.reloadData();
@@ -32,7 +40,7 @@ export class StoreComponent implements OnInit {
 
   // Method to reload data on component initialization
   reloadData() {
-    this.loadBrandsAndTypes();
+    // this.loadBrandsAndTypes();
     this.loadProducts();
   }
 
@@ -46,42 +54,109 @@ export class StoreComponent implements OnInit {
           this.params.page = data.pageIndex;
           this.params.totalPages = data.totalPages;
           this.params.totalItems = data.totalItems;
+          this.toastr.success('Products loaded');
         },
-        error: (error) => this.handleError(error)
+        error: (error) => {
+          this.handleError(error)
+        }
       });
-      this.toastr.success('Products loaded');
   }
 
-  onSubmitFormUpload() {
-    this.uploadFiles(this.productUploadComponent.selectedFile);
+  async onSubmitFormUpload() {
+    const files = (this.productUploadComponent.selectedFile as File[]) || [];
+    if (files.length > 0) {
+      for (var i = 0; i < files.length; i++) {
+        this.loadingService.loading();
+        var jsonDetails: FileDetails = fileToJson(files[0]);
+        const base64Content = btoa(jsonDetails.content as string);
+        console.log(base64Content)
+        const product: CreateProduct = {
+          name: files[i].name,
+          locationImage: await this.onFileSelected(files[i]),
+          productType: files[i].type,
+          file: {
+            name: jsonDetails.name,
+            size: jsonDetails.size,
+            type : jsonDetails.type,
+            content: base64Content
+          },
+        };
+        this.uploadFiles(product);
+      }
+    } else {
+      this.handleError('Invalid files variable: not an array')
+    }
   }
 
-  uploadFiles(files: File[]) {
+  onFileSelected(event: any): Promise<LocationImage> {
+    return new Promise((resolve, reject) => {
+      const file = event;
+      const reader = new FileReader();
+  
+      reader.onload = async (e: any) => {
+        const blob = new Blob([e.target.result], { type: file.type });
+        const locationImage = await this.extractGpsData(blob);
+        resolve(locationImage);
+      };
+  
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  async extractGpsData(blob: Blob): Promise<LocationImage> {
+    try {
+      const locationImage: LocationImage = new LocationImage();
+      const gpsData = await exifr.gps(blob);
+  
+      if (gpsData) {
+        const latitude = gpsData.latitude;
+        const longitude = gpsData.longitude;
+        locationImage.Latitude = latitude;
+        locationImage.Longitude = longitude;
+        return locationImage;
+      } else {
+        console.log('No GPS data found in the image.');
+        return locationImage;
+      }
+    } catch (error) {
+      // console.error('Error extracting GPS data:', error);
+      throw this.handleError(error); // You might want to handle the error appropriately in your application
+    }
+  }
+  
+
+  uploadFiles(files: CreateProduct) {
+    this.loadingService.loading();
     this.storeService.uploadToServer(files).subscribe({
       next: (response) => {
         // Handle the success response
-        console.log(response.code)
-        if(response.isSuccess){
+        if (response.isSuccess) {
           this.toastr.success('Upload successful');
-          this.productUploadComponent.resetFileInput(); 
+          this.productUploadComponent.resetFileInput();
           this.loadProducts();
           this.closebutton.nativeElement.click();
-
+        }else{
+          this.toastr.error(response.message);
+          // this.handleError(error)
         }
       },
       error: (error) => {
+        console.log(error)
         // Handle the error response
         if (error.error && error.error.errors) {
           // Handle validation errors
           const validationErrors = error.error.errors;
-          this.toastr.success('Upload failed',validationErrors);
+          // this.toastr.error('Upload failed', validationErrors);
+          this.handleError(validationErrors)
           // Display or handle validation errors as needed
         } else {
-          this.toastr.success('Upload failed');
+          // this.toastr.error('Upload failed',error);
+          this.handleError(error)
           // Handle other types of errors
         }
       },
     });
+    this.loadingService.idle();
   }
 
   // Fetches brands and types from the store service
@@ -107,7 +182,7 @@ export class StoreComponent implements OnInit {
     this.params.selectedBrand = brand;
     this.loadProducts();
   }
-  
+
   // Handler for type selection
   selectType(type: Type) {
     this.params.selectedType = type;
@@ -122,8 +197,8 @@ export class StoreComponent implements OnInit {
   // Resets search and filter criteria and reloads products
   resetSearch() {
     this.params.search = '';
-    this.params.selectedType = {id:0, name:"All"};
-    this.params.selectedBrand = {id:0, name:"All"};
+    this.params.selectedType = { id: 0, name: "All" };
+    this.params.selectedBrand = { id: 0, name: "All" };
     this.params.sort = 'NameAsc';
     this.loadProducts();
   }
@@ -135,8 +210,7 @@ export class StoreComponent implements OnInit {
 
   // Generic error handler for HTTP requests
   private handleError(error: any) {
-    console.error('An error occurred:', error);
+    // console.error('An error occurred:', error);
+    this.toastr.error(error.statusText);
   }
-
-
 }

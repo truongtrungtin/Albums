@@ -5,17 +5,22 @@ import { Product } from '../shared/models/Product';
 import { Pagination } from '../shared/models/Pagination';
 import { StoreParams } from '../shared/models/storeParams';
 import { ApiResponse } from '../shared/models/ApiResponse';
+import { CreateProduct } from '../shared/models/createProduct';
+import { FileDetails, fileToJson } from '../shared/models/fileJson';
+import { Type } from '../shared/models/type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoreService {
-  private apiUrl = 'https://api-albums.ddns.net/api/v1';
+  // private apiUrl = 'https://api-albums.ddns.net/api/v1';
   // private apiUrl = 'https://localhost:7272/api/v1';
-
+  private apiUrl = 'http://localhost:5193/api/v1';
   // Inject HttpClient for making HTTP requests
   constructor(private http: HttpClient) { }
   // Fetches products with optional filtering, sorting, and pagination
+
+
   getProducts(
     storeParams: StoreParams
   ): Observable<ApiResponse<Pagination<Product>>> {
@@ -50,10 +55,10 @@ export class StoreService {
   // }
 
   // // Fetches all available types
-  // getTypes(): Observable<Type[]> {
-  //   const url = `${this.apiUrl}/Products/Types`;
-  //   return this.http.get<Type[]>(url);
-  // }
+  getTypes(): Observable<Type[]> {
+    const url = `${this.apiUrl}/Products/Types`;
+    return this.http.get<Type[]>(url);
+  }
 
   // Helper method to create HttpParams from an object
   private createHttpParams(options: any): HttpParams {
@@ -75,32 +80,11 @@ export class StoreService {
     return headers;
   }
 
-  getBase64(file: File) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      console.log(reader.result);
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
-  }
-
-  uploadToServer(files: File[]): Observable<ApiResponse<Pagination<Product>>> {
-    const formData = new FormData();
-
-    // Append each file to the FormData
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i], files[i].name);
-    }
-
-    // Make the HTTP POST request to the CreateProduct API endpoint
-    // Include headers in the request options
+  uploadToServer(createProduct: CreateProduct): Observable<ApiResponse<Pagination<Product>>> {
     const headers = this.getHeaderAuthorization();
-    const options = { headers };
-
-    return this.http.post<any>(`${this.apiUrl}/Products/`, formData, {
+    return this.http.post<any>(`${this.apiUrl}/Products/`, createProduct, {
       headers,
     });
   }
+
 }

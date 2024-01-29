@@ -1,4 +1,5 @@
 import { Time } from "@angular/common";
+import { LocationImage } from "./locationImage";
 
 export interface Product {
   productId: string;
@@ -9,10 +10,8 @@ export interface Product {
   pictureUrl: string;
   productType: string;
   productBrand: string;
-  location: string;
   duringTime: Time | null;
   url: string;
   MonthCreate?: number;
   YearCreate?: number;
-
 }

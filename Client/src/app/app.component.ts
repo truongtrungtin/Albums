@@ -12,13 +12,12 @@ export class AppComponent implements OnInit {
   title = 'Sports Center';
 
   constructor(
-    private http: HttpClient,
     private basketService: BasketService,
     private accountService: AccountService
   ) { }
 
   ngOnInit() {
-    this.loadBasket();
+    // this.loadBasket();
     this.loadUser();
   }
 
