@@ -14,8 +14,8 @@ import { Type } from '../shared/models/type';
 })
 export class StoreService {
   // private apiUrl = 'https://api-albums.ddns.net/api/v1';
-  // private apiUrl = 'https://localhost:7272/api/v1';
-  private apiUrl = 'http://localhost:5193/api/v1';
+  private apiUrl = 'https://localhost:7272/api/v1';
+  // private apiUrl = 'http://localhost:5193/api/v1';
   // Inject HttpClient for making HTTP requests
   constructor(private http: HttpClient) { }
   // Fetches products with optional filtering, sorting, and pagination
@@ -80,8 +80,9 @@ export class StoreService {
     return headers;
   }
 
-  uploadToServer(createProduct: CreateProduct): Observable<ApiResponse<Pagination<Product>>> {
+  uploadToServer(createProduct: CreateProduct, file: File): Observable<ApiResponse<Pagination<Product>>> {
     const headers = this.getHeaderAuthorization();
+    console.log(    JSON.stringify(file))
     return this.http.post<any>(`${this.apiUrl}/Products/`, createProduct, {
       headers,
     });

@@ -66,7 +66,6 @@ export class StoreComponent implements OnInit {
     const files = (this.productUploadComponent.selectedFile as File[]) || [];
     if (files.length > 0) {
       for (var i = 0; i < files.length; i++) {
-        this.loadingService.loading();
         var jsonDetails: FileDetails = fileToJson(files[0]);
         const base64Content = btoa(jsonDetails.content as string);
         console.log(base64Content)
@@ -81,7 +80,7 @@ export class StoreComponent implements OnInit {
             content: base64Content
           },
         };
-        this.uploadFiles(product);
+        this.uploadFiles(product, files[i]);
       }
     } else {
       this.handleError('Invalid files variable: not an array')
@@ -125,9 +124,8 @@ export class StoreComponent implements OnInit {
   }
   
 
-  uploadFiles(files: CreateProduct) {
-    this.loadingService.loading();
-    this.storeService.uploadToServer(files).subscribe({
+  uploadFiles(files: CreateProduct, file: File) {
+    this.storeService.uploadToServer(files,file ).subscribe({
       next: (response) => {
         // Handle the success response
         if (response.isSuccess) {
@@ -156,7 +154,6 @@ export class StoreComponent implements OnInit {
         }
       },
     });
-    this.loadingService.idle();
   }
 
   // Fetches brands and types from the store service

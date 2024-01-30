@@ -5,6 +5,7 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 
 const routes: Routes = [
   {path: '', component:StoreComponent},
+  {path: '/share', component:ProductDetailsComponent, data: { breadcrumb: {alias:'share'} }},
   {path: ':id', component:ProductDetailsComponent, data: { breadcrumb: {alias:'productName'} }},
 ];
 

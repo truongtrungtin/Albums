@@ -38,8 +38,7 @@ public class ProductsController : BaseController
             this._currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
             createProduct.File.Content = createProduct.File.Content.Replace('-', '+').Replace('_', '/');
 
-            byte[] fileContent = Convert.FromBase64String(createProduct.File.Content.Trim());
-
+            byte[] fileContent = Convert.FromBase64String(createProduct.File.Content.Replace('-', '+').Replace('_', '/'));
 
             // Create an in-memory IFormFile
             var file = new FormFile(new MemoryStream(fileContent), 0, fileContent.Length, "file", createProduct.File.Name)
