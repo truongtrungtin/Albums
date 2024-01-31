@@ -1,27 +1,22 @@
 using Core.Entities;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Infrastructure.Data.Specifications
 {
-    public class ProductCountSpecification : BaseSpecification<ProductModel>
+    public class FileAttachmentCountSpecification : BaseSpecification<FileAttachmentModel>
     {
-        public ProductCountSpecification(string? sort, Guid? productTypeId, Guid? productBrandId, string search)
+        public FileAttachmentCountSpecification(string fileExtention, string fileType)
         {
             // Apply filter criteria similar to ProductWithTypesAndBrandSpecification
-            if (productTypeId.HasValue || productBrandId.HasValue || !string.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrWhiteSpace(fileExtention) ||  !string.IsNullOrWhiteSpace(fileType))
             {
-                ApplyCriteria(x => 
-                    (string.IsNullOrWhiteSpace(search) || x.ProductName.ToLower().Contains(search.ToLower()))
+                ApplyCriteria(x =>
+                    (string.IsNullOrWhiteSpace(fileExtention) || x.FileExtention.ToLower().Contains(fileExtention.ToLower()))
+                    && (string.IsNullOrWhiteSpace(fileType) || x.FileType.ToLower().Contains(fileType.ToLower()))
+
                 );
             }
         }
-
-        public ProductCountSpecification(string? sort, Guid? productTypeId)
-        {
-            // Apply filter criteria similar to ProductWithTypesAndBrandSpecification
-            if (productTypeId.HasValue)
-            {
-                ApplyCriteria(x => x.CategoryId == productTypeId );
-            }
-        }
+      
     }
 }

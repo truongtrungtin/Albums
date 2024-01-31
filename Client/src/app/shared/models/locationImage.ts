@@ -1,5 +1,5 @@
 export class LocationImage{
-    Latitude: number | undefined;
-    Longitude: number | undefined;
+    Latitude: number = 0;
+    Longitude: number = 0;
 }
 

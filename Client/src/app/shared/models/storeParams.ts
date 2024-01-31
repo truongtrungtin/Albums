@@ -1,8 +1,8 @@
 // storeParams.model.ts
 
-import { Product } from './Product';
-import { Brand } from './brand';
-import { Type } from './type';
+import { Catalog } from './Catalog';
+import { FileAttachment } from './FileAttachment';
+import { Profile } from './Profile';
 
 export class StoreParams {
   sort: string  = 'NameAsc';
@@ -15,14 +15,17 @@ export class StoreParams {
   YearCreate?: string | null;
   name: string | null = '';
   
-  productBrandId?: number | null;
-  productTypeId?: number | null;
-  products: Product[] = [];
-  brands: Brand[] = [];
-  types: Type[]= [];
+  fileExtention?: string | null;
+  fileType?: string | null;
+  fileAttachments: FileAttachment[] = [];
+  fileExtentions: Catalog[] = [];
+  fileTypes: Catalog[]= [];
+  profiles: Profile[]= [];
 
-  selectedBrand: Brand | null = {id:0, name:"All"}; // Default brand selection
-  selectedType: Type | null = {id:0, name:"All"}; // Default type selection
+
+  selectedFileType: Catalog | null = {catalogCode: "", catalogText_vi: "All" }; // Default type selection
+  selectedFileExtention: Catalog | null = {catalogCode: "", catalogText_vi: "All",  }; // Default brand selection
+  selectedProfile: Profile | null = {profileCode: "", profileName: "All", profileId: "", avatar: "", createBy: ""}; // Default type selection
 
   page: number = 1 ;
   pageSize: number = 9;

@@ -24,6 +24,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Customer].[Profile_File_Share_mapping]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Customer].[ProfileModel]",
          "ObjectType": 0
       },
@@ -164,7 +168,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "tintruong.albums_db.dbo",
+   "UiHint": "tintruong.Albums_db.dbo1",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,

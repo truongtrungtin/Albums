@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Core.Interfaces;
 
 namespace Infrastructure.Data.Models
 {
@@ -19,6 +20,8 @@ namespace Infrastructure.Data.Models
         public UnitOfWork _unitOfWork;
         public IMapper _mapper;
         public IHostingEnvironment _hostingEnvironment;
+        public IRepository<CatalogModel> _catalogRepository;
+
         //public List<ExcelHeadingTemplate> heading = new List<ExcelHeadingTemplate>();
         protected BaseController()
         {

@@ -6,8 +6,10 @@ import { Pagination } from '../shared/models/Pagination';
 import { StoreParams } from '../shared/models/storeParams';
 import { ApiResponse } from '../shared/models/ApiResponse';
 import { CreateProduct } from '../shared/models/createProduct';
-import { FileDetails, fileToJson } from '../shared/models/fileJson';
-import { Type } from '../shared/models/type';
+import { Catalog } from '../shared/models/Catalog';
+import { FileAttachment } from '../shared/models/FileAttachment';
+import { Profile } from '../shared/models/Profile';
+import { CreateProfile } from '../shared/models/createProfile';
 
 @Injectable({
   providedIn: 'root',
@@ -21,43 +23,63 @@ export class StoreService {
   // Fetches products with optional filtering, sorting, and pagination
 
 
-  getProducts(
+  getFileAttachments(
     storeParams: StoreParams
-  ): Observable<ApiResponse<Pagination<Product>>> {
+  ): Observable<ApiResponse<Pagination<FileAttachment>>> {
     // Create HttpParams for request
     let params = this.createHttpParams({
       sort: storeParams.sort,
       page: storeParams.page,
       pageSize: storeParams.pageSize,
-      productBrandId: storeParams.selectedBrand?.id,
-      productTypeId: storeParams.selectedType?.id,
+      fileExtention: storeParams.selectedFileExtention?.catalogCode,
+      fileType: storeParams.selectedFileType?.catalogCode,
+      profile: storeParams.selectedProfile?.profileCode,
       search: storeParams.search,
     }); // Construct the URL for the request
-    const url = `${this.apiUrl}/Products`;
+    const url = `${this.apiUrl}/FileAttachment`;
     const headers = this.getHeaderAuthorization();
 
     // Perform the HTTP GET request
-    return this.http.get<ApiResponse<Pagination<Product>>>(`${url}`, {
+    return this.http.get<ApiResponse<Pagination<FileAttachment>>>(`${url}`, {
       params,
       headers,
     });
   }
 
-  getProduct(id: number) {
-    const url = `${this.apiUrl}/Products/` + id;
-    return this.http.get<Product>(url);
+  getFileAttachment(id: string) {
+    const url = `${this.apiUrl}/FileAttachment/` + id;
+    const headers = this.getHeaderAuthorization();
+
+    return this.http.get<FileAttachment>(url,{
+      headers
+    });
   }
 
-  // Fetches all available brands
-  // getBrands(): Observable<Brand[]> {
-  //   const url = `${this.apiUrl}/Products/Brands`;
-  //   return this.http.get<Brand[]>(url);
-  // }
+  getProfiles(): Observable<Profile[]> {
+    const url = `${this.apiUrl}/Profile`;
+    const headers = this.getHeaderAuthorization();
 
-  // // Fetches all available types
-  getTypes(): Observable<Type[]> {
-    const url = `${this.apiUrl}/Products/Types`;
-    return this.http.get<Type[]>(url);
+    return this.http.get<Profile[]>(url,{
+      headers
+    });
+  }
+
+  getFileExtentions(): Observable<Catalog[]> {
+    const url = `${this.apiUrl}/FileAttachment/fileextentions`;
+    const headers = this.getHeaderAuthorization();
+
+    return this.http.get<Catalog[]>(url,{
+      headers
+    });
+  }
+
+  getFileTypes(): Observable<Catalog[]> {
+    const url = `${this.apiUrl}/FileAttachment/filetypes`;
+    const headers = this.getHeaderAuthorization();
+
+    return this.http.get<Catalog[]>(url,{
+      headers
+    });
   }
 
   // Helper method to create HttpParams from an object
@@ -80,12 +102,41 @@ export class StoreService {
     return headers;
   }
 
-  uploadToServer(createProduct: CreateProduct, file: File): Observable<ApiResponse<Pagination<Product>>> {
+
+  uploadProfileToServer(profile: CreateProfile): Observable<Profile> {
+    const formData = new FormData();
+  
+    // Append product properties
+    formData.append('profileName', profile.profileName);
+    formData.append('avatar', profile.avatar, profile.avatar.name);
+
     const headers = this.getHeaderAuthorization();
-    console.log(    JSON.stringify(file))
-    return this.http.post<any>(`${this.apiUrl}/Products/`, createProduct, {
+  
+    return this.http.post<any>(`${this.apiUrl}/Profile`, formData, {
       headers,
     });
   }
+
+
+  uploadToServer(createProduct: CreateProduct): Observable<ApiResponse<Pagination<FileAttachment>>> {
+    const formData = new FormData();
+  
+    // Append product properties
+    formData.append('name', createProduct.file.name);
+    formData.append('file', createProduct.file, createProduct.file.name);
+
+    if (createProduct.locationImage) {
+      formData.append('locationImage.latitude', createProduct.locationImage.Latitude.toString());
+      formData.append('locationImage.longitude', createProduct.locationImage.Longitude.toString());
+    }
+  
+    const headers = this.getHeaderAuthorization();
+  
+    return this.http.post<any>(`${this.apiUrl}/FileAttachment/`, formData, {
+      headers,
+    });
+  }
+  
+  
 
 }

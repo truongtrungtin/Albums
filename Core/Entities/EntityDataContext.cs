@@ -73,6 +73,8 @@ public partial class EntityDataContext : DbContext
 
     public virtual DbSet<ProfileModel> ProfileModel { get; set; }
 
+    public virtual DbSet<Profile_File_Share_mapping> Profile_File_Share_mapping { get; set; }
+
     public virtual DbSet<ProvinceModel> ProvinceModel { get; set; }
 
     public virtual DbSet<RefreshToken> RefreshToken { get; set; }
@@ -87,7 +89,7 @@ public partial class EntityDataContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=albums-tt.ddns.net;Initial Catalog=albums_db;User ID=albums_db;Password=Trungtin@30599;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=albums-tt.ddns.net;Initial Catalog=Albums_db;Persist Security Info=True;User ID=albums_db;Password=Trungtin@30599;MultipleActiveResultSets=True;TrustServerCertificate=True;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -311,6 +313,11 @@ public partial class EntityDataContext : DbContext
             entity.Property(e => e.ProfileCode).ValueGeneratedOnAdd();
         });
 
+        modelBuilder.Entity<Profile_File_Share_mapping>(entity =>
+        {
+            entity.Property(e => e.Profile_File_Share_Id).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<ProvinceModel>(entity =>
         {
             entity.Property(e => e.ProvinceId).ValueGeneratedNever();
@@ -346,6 +353,7 @@ public partial class EntityDataContext : DbContext
         {
             entity.Property(e => e.WardId).ValueGeneratedNever();
         });
+        modelBuilder.HasSequence("ProfileCodeSequence").StartsAt(10000L);
 
         OnModelCreatingPartial(modelBuilder);
     }

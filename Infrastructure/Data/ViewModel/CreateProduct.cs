@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.ViewModel
 {
-    public class CreateProduct
+    public class CreateFile
     {
         public string Name { get; set; }
-        public string ProductType { get; set; }
+        public Guid? ProfileId { get; set; }
         public LocationViewModel? LocationImage { get; set; }
-        public FileDetails File { get; set; }
+        public IFormFile File { get; set; }
     }
     
 }

@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { StoreComponent } from '../store.component';
+import { Profile } from 'src/app/shared/models/Profile';
 
 @Component({
   selector: 'app-product-upload',
@@ -9,12 +10,10 @@ import { StoreComponent } from '../store.component';
 export class ProductUploadComponent {
   files: File[] = [];
   selectedFile: File[] = [];
+  profiles: Profile[] = [];
   @ViewChild('fileInputRef') fileInputRef: any;
 
-  constructor(private storeComponent: StoreComponent) {}
-
   onSelect(event: any) {
-    console.log(event);
     this.files.push(...event.addedFiles);
   }
 

@@ -9,6 +9,7 @@ import { ProductUploadComponent } from './product-upload/product-upload.componen
 
 import { StoreRoutingModule } from './store-routing.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { ProductProfilesComponent } from './product-profiles/product-profiles.component';
 
 
 
@@ -18,6 +19,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     ProductItemComponent,
     ProductDetailsComponent,
     ProductUploadComponent,
+    ProductProfilesComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     StoreComponent,
     ProductItemComponent,
     ProductDetailsComponent,
-    ProductUploadComponent
+    ProductUploadComponent,
+    ProductProfilesComponent
   ]
 })
 export class StoreModule { }

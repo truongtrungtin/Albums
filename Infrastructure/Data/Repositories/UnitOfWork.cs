@@ -95,18 +95,18 @@ namespace Infrastructure.Data.Repositories
         #endregion
 
         #region Libary
-        //private UtilitiesRepository _utilitiesRepository;
-        //public UtilitiesRepository UtilitiesRepository
-        //{
-        //    get
-        //    {
-        //        if (_utilitiesRepository == null)
-        //        {
-        //            _utilitiesRepository = new UtilitiesRepository();
-        //        }
-        //        return _utilitiesRepository;
-        //    }
-        //}
+        private UtilitiesRepository _utilitiesRepository;
+        public UtilitiesRepository UtilitiesRepository
+        {
+            get
+            {
+                if (_utilitiesRepository == null)
+                {
+                    _utilitiesRepository = new UtilitiesRepository();
+                }
+                return _utilitiesRepository;
+            }
+        }
         #endregion
 
 

@@ -1,7 +1,4 @@
 // import { createId } from "@paralleldrive/cuid2"
-import { Brand } from "./brand"
-import { Type } from "./type"
-
 export interface Basket{
     id: string
     items: BasketItem[]

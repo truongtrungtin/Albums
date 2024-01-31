@@ -1,17 +1,17 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { StoreService } from './store.service';
-import { Brand } from '../shared/models/brand';
-import { Type } from '../shared/models/type';
 import { StoreParams } from '../shared/models/storeParams';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { ToastrService } from 'ngx-toastr';
 import { ProductUploadComponent } from './product-upload/product-upload.component';
 import * as exifr from 'exifr';
 import { LocationImage } from '../shared/models/locationImage';
-import { Product } from '../shared/models/Product';
 import { CreateProduct } from '../shared/models/createProduct';
-import { FileDetails, fileToJson } from '../shared/models/fileJson';
 import { LoadingService } from '../core/services/loading.service';
+import { Catalog } from '../shared/models/Catalog';
+import { Profile } from '../shared/models/Profile';
+import { ProductProfilesComponent } from './product-profiles/product-profiles.component';
+import { CreateProfile } from '../shared/models/createProfile';
 
 @Component({
   selector: 'app-store',
@@ -21,7 +21,10 @@ import { LoadingService } from '../core/services/loading.service';
 export class StoreComponent implements OnInit {
   @Input() title: string = '';
   @ViewChild(ProductUploadComponent) productUploadComponent!: ProductUploadComponent;
-  @ViewChild('closebutton') closebutton: any;
+  @ViewChild(ProductProfilesComponent) productProfilesComponent!: ProductProfilesComponent;
+
+  @ViewChild('closebuttonupload') closebuttonupload: any;
+  @ViewChild('closebuttoncreateprofile') closebuttoncreateprofile: any;
 
   // Store-related data
   params: StoreParams = new StoreParams();
@@ -40,17 +43,18 @@ export class StoreComponent implements OnInit {
 
   // Method to reload data on component initialization
   reloadData() {
-    // this.loadBrandsAndTypes();
-    this.loadProducts();
+    this.loadExtentionsAndTypes();
+    this.loadFileAttachments();
   }
 
+  //#region fileAttachments
   // Fetches products from the store service
-  loadProducts() {
-    this.storeService.getProducts(this.params)
+  loadFileAttachments() {
+    this.storeService.getFileAttachments(this.params)
       .subscribe({
         next: (response) => {
           const data = response.data;
-          this.params.products = data.data;
+          this.params.fileAttachments = data.data;
           this.params.page = data.pageIndex;
           this.params.totalPages = data.totalPages;
           this.params.totalItems = data.totalItems;
@@ -66,38 +70,101 @@ export class StoreComponent implements OnInit {
     const files = (this.productUploadComponent.selectedFile as File[]) || [];
     if (files.length > 0) {
       for (var i = 0; i < files.length; i++) {
-        var jsonDetails: FileDetails = fileToJson(files[0]);
-        const base64Content = btoa(jsonDetails.content as string);
-        console.log(base64Content)
         const product: CreateProduct = {
           name: files[i].name,
           locationImage: await this.onFileSelected(files[i]),
           productType: files[i].type,
-          file: {
-            name: jsonDetails.name,
-            size: jsonDetails.size,
-            type : jsonDetails.type,
-            content: base64Content
-          },
+          file: files[i],
         };
-        this.uploadFiles(product, files[i]);
+        this.uploadFiles(product);
       }
     } else {
       this.handleError('Invalid files variable: not an array')
     }
   }
+  uploadFiles(files: CreateProduct) {
+    this.storeService.uploadToServer(files).subscribe({
+      next: (response) => {
+        // Handle the success response
+        if (response.isSuccess) {
+          this.toastr.success('Upload successful');
+          this.productUploadComponent.resetFileInput();
+          this.loadFileAttachments();
+          this.closebuttonupload.nativeElement.click();
+          this.productUploadComponent.resetFileInput();
+        } else {
+          this.toastr.error(response.message);
+          // this.handleError(error)
+        }
+      },
+      error: (error) => {
+        console.log(error)
+        if (error.error && error.error.errors) {
+          const validationErrors = error.error.errors;
+          this.handleError(validationErrors)
+        } else {
+          this.handleError(error)
+        }
+      },
+    });
+  }
+
+
+  //#endregion
+
+  //#region profile
+
+  async onSubmitFormCreateProfile() {
+    const displayName = (document.getElementById('profileName') as HTMLInputElement)?.value;
+    const files = (this.productProfilesComponent.selectedFile as File[]) || [];
+    if (files.length > 0) {
+      for (var i = 0; i < files.length; i++) {
+        const profile: CreateProfile = {
+          profileName: displayName,
+          avatar: files[i],
+        };
+        this.uploadProfile(profile);
+      }
+    } else {
+      this.handleError('Please provide a display name and select an avatar file.');
+    }
+  }
+  uploadProfile(files: CreateProfile) {
+    this.storeService.uploadProfileToServer(files).subscribe({
+      next: (response) => {
+        // Handle the success response
+        this.toastr.success('Upload successful');
+        this.loadExtentionsAndTypes();
+        this.closebuttoncreateprofile.nativeElement.click();
+        this.productProfilesComponent.resetFileInput();
+      },
+      error: (error) => {
+        console.log(error)
+        if (error.error && error.error.errors) {
+          const validationErrors = error.error.errors;
+          this.handleError(validationErrors)
+        } else {
+          this.handleError(error)
+        }
+      },
+    });
+  }
+
+  //#endregion
+
+
 
   onFileSelected(event: any): Promise<LocationImage> {
     return new Promise((resolve, reject) => {
       const file = event;
       const reader = new FileReader();
-  
+
       reader.onload = async (e: any) => {
         const blob = new Blob([e.target.result], { type: file.type });
         const locationImage = await this.extractGpsData(blob);
         resolve(locationImage);
       };
-  
+
       reader.readAsArrayBuffer(file);
     });
   }
@@ -106,7 +173,7 @@ export class StoreComponent implements OnInit {
     try {
       const locationImage: LocationImage = new LocationImage();
       const gpsData = await exifr.gps(blob);
-  
+
       if (gpsData) {
         const latitude = gpsData.latitude;
         const longitude = gpsData.longitude;
@@ -118,94 +185,63 @@ export class StoreComponent implements OnInit {
         return locationImage;
       }
     } catch (error) {
-      // console.error('Error extracting GPS data:', error);
-      throw this.handleError(error); // You might want to handle the error appropriately in your application
+      throw this.handleError(error);
     }
   }
-  
 
-  uploadFiles(files: CreateProduct, file: File) {
-    this.storeService.uploadToServer(files,file ).subscribe({
-      next: (response) => {
-        // Handle the success response
-        if (response.isSuccess) {
-          this.toastr.success('Upload successful');
-          this.productUploadComponent.resetFileInput();
-          this.loadProducts();
-          this.closebutton.nativeElement.click();
-        }else{
-          this.toastr.error(response.message);
-          // this.handleError(error)
-        }
-      },
-      error: (error) => {
-        console.log(error)
-        // Handle the error response
-        if (error.error && error.error.errors) {
-          // Handle validation errors
-          const validationErrors = error.error.errors;
-          // this.toastr.error('Upload failed', validationErrors);
-          this.handleError(validationErrors)
-          // Display or handle validation errors as needed
-        } else {
-          // this.toastr.error('Upload failed',error);
-          this.handleError(error)
-          // Handle other types of errors
-        }
-      },
+
+
+  loadExtentionsAndTypes() {
+    this.storeService.getFileExtentions().subscribe({
+      next: (extentions) => this.params.fileExtentions = [{ catalogCode: "", catalogText_vi: "All" }, ...extentions],
+      error: (error) => this.handleError(error)
+    });
+    this.storeService.getFileTypes().subscribe({
+      next: (types) => this.params.fileTypes = [{ catalogCode: "", catalogText_vi: "All" }, ...types],
+      error: (error) => this.handleError(error)
+    });
+    this.storeService.getProfiles().subscribe({
+      next: (profiles) => this.params.profiles = [{ profileCode: "", profileName: "All", profileId: "", avatar: "", createBy: "" }, ...profiles],
+      error: (error) => this.handleError(error)
     });
   }
 
-  // Fetches brands and types from the store service
-  loadBrandsAndTypes() {
-    // this.storeService.getBrands().subscribe({
-    //   next: (brands) => this.params.brands = [{id:0, name:"All"}, ...brands],
-    //   error: (error) => this.handleError(error)
-    // });
-    // this.storeService.getTypes().subscribe({
-    //   next: (types) => this.params.types = [{id:0, name:"All"}, ...types],
-    //   error: (error) => this.handleError(error)
-    // });
-  }
-
-  // Pagination handler
   onPageChanged(event: PageChangedEvent) {
     this.params.page = event.page;
-    this.loadProducts();
+    this.loadFileAttachments();
   }
 
-  // Handler for brand selection
-  selectBrand(brand: Brand) {
-    this.params.selectedBrand = brand;
-    this.loadProducts();
+  selectExtention(extention: Catalog) {
+    this.params.selectedFileExtention = extention;
+    this.loadFileAttachments();
   }
 
-  // Handler for type selection
-  selectType(type: Type) {
-    this.params.selectedType = type;
-    this.loadProducts();
+  selectType(type: Catalog) {
+    this.params.selectedFileType = type;
+    this.loadFileAttachments();
   }
 
-  // Applies the search term to filter products
+  selectProfile(profile: Profile) {
+    this.params.selectedProfile = profile;
+    this.loadFileAttachments();
+  }
+
   applySearch() {
-    this.loadProducts();
+    this.loadFileAttachments();
   }
 
-  // Resets search and filter criteria and reloads products
   resetSearch() {
     this.params.search = '';
-    this.params.selectedType = { id: 0, name: "All" };
-    this.params.selectedBrand = { id: 0, name: "All" };
+    this.params.selectedFileType = { catalogCode: "", catalogText_vi: "All" };
+    this.params.selectedFileExtention = { catalogCode: "", catalogText_vi: "All" };
     this.params.sort = 'NameAsc';
-    this.loadProducts();
+    this.loadFileAttachments();
   }
 
-  // Applies selected sorting option
   applySort() {
-    this.loadProducts();
+    this.loadFileAttachments();
   }
 
-  // Generic error handler for HTTP requests
   private handleError(error: any) {
     // console.error('An error occurred:', error);
     this.toastr.error(error.statusText);

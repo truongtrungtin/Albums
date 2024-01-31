@@ -26,6 +26,9 @@ public partial class FileAttachmentModel
     [StringLength(50)]
     public string FileExtention { get; set; }
 
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal? Size { get; set; }
+
     [StringLength(500)]
     public string FileUrl { get; set; }
 
@@ -41,4 +44,10 @@ public partial class FileAttachmentModel
 
     [StringLength(50)]
     public string FileType { get; set; }
+
+    [Column(TypeName = "text")]
+    public string Latitude { get; set; }
+
+    [Column(TypeName = "text")]
+    public string Longitude { get; set; }
 }

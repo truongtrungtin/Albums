@@ -8,8 +8,8 @@ namespace Infrastructure.Data.ViewModel
 {
     public class LocationViewModel
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
 
     }
 }

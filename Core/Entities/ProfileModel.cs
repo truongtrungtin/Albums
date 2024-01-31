@@ -16,11 +16,37 @@ public partial class ProfileModel
 
     public int ProfileCode { get; set; }
 
+    [StringLength(20)]
+    public string CustomerTypeCode { get; set; }
+
     [StringLength(200)]
     public string FirstName { get; set; }
 
     [StringLength(200)]
     public string LastName { get; set; }
+
+    [StringLength(10)]
+    public string Age { get; set; }
+
+    public int? DayOfBirth { get; set; }
+
+    public int? MonthOfBirth { get; set; }
+
+    public int? YearOfBirth { get; set; }
+
+    [StringLength(4000)]
+    public string Address { get; set; }
+
+    [StringLength(500)]
+    public string Email { get; set; }
+
+    [StringLength(20)]
+    [Unicode(false)]
+    public string Phone { get; set; }
+
+    public bool? Actived { get; set; }
+
+    public string Avatar { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreateTime { get; set; }
@@ -32,19 +58,115 @@ public partial class ProfileModel
 
     public Guid? LastEditBy { get; set; }
 
-    [StringLength(500)]
-    public string Email { get; set; }
+    public string Text1 { get; set; }
 
-    public string Token { get; set; }
+    public string Text2 { get; set; }
 
-    [StringLength(100)]
-    public string Password { get; set; }
+    public string Text3 { get; set; }
 
-    [StringLength(20)]
-    [Unicode(false)]
-    public string Phone { get; set; }
+    public string Text4 { get; set; }
 
-    public bool? Actived { get; set; }
+    public string Text5 { get; set; }
 
-    public string Avatar { get; set; }
+    public string Text6 { get; set; }
+
+    public string Text7 { get; set; }
+
+    public string Text8 { get; set; }
+
+    public string Text9 { get; set; }
+
+    public string Text10 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number1 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number2 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number3 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number4 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number5 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number6 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number7 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number8 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number9 { get; set; }
+
+    [Column(TypeName = "decimal(18, 3)")]
+    public decimal? Number10 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist1 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist2 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist3 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist4 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist5 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist6 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist7 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist8 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist9 { get; set; }
+
+    [StringLength(50)]
+    public string Dropdownlist10 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date1 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date2 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date3 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date4 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date5 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date6 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date7 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date8 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date9 { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? Date10 { get; set; }
+
+    public string CustomField { get; set; }
 }

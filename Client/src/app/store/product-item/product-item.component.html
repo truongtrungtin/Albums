@@ -1,16 +1,16 @@
 <!-- product-item.component.html -->
 <!-- Check if the item is an image -->
-<ng-container *ngIf="product && (isImage() || isVideo())">
+<ng-container *ngIf="file && (isImage() || isVideo())">
   <ng-container *ngIf="isImage()">
-    <button type="button" class="btn" data-bs-toggle="modal" [attr.data-bs-target]="'#modal_' + product.productId">
-      <img [src]="'https://api-albums.ddns.net/Upload/Product/' + extractImageName()" [alt]="product.name"
+    <button type="button" class="btn" data-bs-toggle="modal" [attr.data-bs-target]="'#modal_' + file.fileAttachmentId">
+      <img [src]="'https://api-albums.ddns.net/Upload/Product/' + extractImageName()" [alt]="file.fileAttachmentName"
         class="w-100 shadow-1-strong rounded" alt="Boat on Calm Water" />
       <div class="image-icons">
         <i class="fa fa-info-circle" (click)="showImageInfo()"></i>
         <i class="fa fa-download" (click)="downloadFile()" title="Download Image"></i>
       </div>
     </button>
-    <div class="modal modal-lg fade" [attr.id]="'modal_' + product.productId" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal modal-lg fade" [attr.id]="'modal_' + file.fileAttachmentId" tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -19,7 +19,7 @@
             <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body mh-50">
-            <img [src]="'https://api-albums.ddns.net/Upload/Product/'+ extractImageName()" [alt]="product.name"
+            <img [src]="'https://api-albums.ddns.net/Upload/Product/'+ extractImageName()" [alt]="file.fileAttachmentName"
               class="w-100 shadow-1-strong rounded" />
           </div>
           <div class="modal-footer">
@@ -36,13 +36,13 @@
     </div>
   </ng-container>
   <ng-container *ngIf="isVideo()">
-    <button type="button" class="btn" data-bs-toggle="modal"  [attr.data-bs-target]="'#modal_' + product.productId">
+    <button type="button" class="btn" data-bs-toggle="modal"  [attr.data-bs-target]="'#modal_' + file.fileAttachmentId">
       <video class="w-100 shadow-1-strong rounded">
-        <source  [src]="'https://api-albums.ddns.net/Upload/Product/' + extractImageName()"  [type]="product.productType">
+        <source  [src]="'https://api-albums.ddns.net/Upload/Product/' + extractImageName()"  [type]="file.fileType">
         Your browser does not support the video tag.
       </video>
     </button>
-    <div class="modal modal-lg fade" [attr.id]="'modal_' + product.productId" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal modal-lg fade" [attr.id]="'modal_' + file.fileAttachmentId" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -52,7 +52,7 @@
         </div>
         <div class="modal-body">
           <video  class="w-100 shadow-1-strong rounded">
-            <source  [src]="'https://api-albums.ddns.net/Upload/Product/' + extractImageName()"  [type]="product.productType">
+            <source  [src]="'https://api-albums.ddns.net/Upload/Product/' + extractImageName()"  [type]="file.fileType">
             Your browser does not support the video tag.
           </video>
         </div>

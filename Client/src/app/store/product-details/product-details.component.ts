@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/shared/models/Product';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { BasketService } from 'src/app/basket/basket.service';
+import { FileAttachment } from 'src/app/shared/models/FileAttachment';
 
 @Component({
   selector: 'app-product-details',
@@ -11,7 +12,7 @@ import { BasketService } from 'src/app/basket/basket.service';
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
-  product?: Product;
+  fileAttachment?: FileAttachment;
   quantity: number = 1;
 
   constructor(
@@ -21,17 +22,17 @@ export class ProductDetailsComponent implements OnInit {
     private basketService: BasketService,
     ){}
   ngOnInit(): void {
-    this.loadProduct();
+    this.loadFileAttachment();
   }
 
 
-  loadProduct(){
+  loadFileAttachment(){
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if(id){
-      this.storeService.getProduct(+id).subscribe({
-        next:product => {
-          this.product = product,
-          this.breadcrumbService.set('@productName',product.name)
+      this.storeService.getFileAttachment(id).subscribe({
+        next:file => {
+          this.fileAttachment = file,
+          this.breadcrumbService.set('@fileAttachmentName',file.fileAttachmentName)
         },
         error: error => console.log(error)
       });
@@ -39,8 +40,8 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   extractImageName(): string | null {
-    if(this.product && this.product.pictureUrl){
-      const parts = this.product.pictureUrl.split('/');
+    if(this.fileAttachment && this.fileAttachment.fileUrl){
+      const parts = this.fileAttachment.fileUrl.split('/');
       if(parts.length > 0){
         return parts[parts.length - 1];
       }
@@ -48,17 +49,17 @@ export class ProductDetailsComponent implements OnInit {
     return null;
   }
 
-  incrementQuantity() {
-    this.quantity++;
-  }
+  // incrementQuantity() {
+  //   this.quantity++;
+  // }
 
-  decrementQuantity() {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
-  }
+  // decrementQuantity() {
+  //   if (this.quantity > 1) {
+  //     this.quantity--;
+  //   }
+  // }
 
-  addItemToBasket(){
-    this.product && this.basketService.addItemToBasket(this.product, this.quantity);
-   }
+  // addItemToBasket(){
+  //   this.product && this.basketService.addItemToBasket(this.product, this.quantity);
+  //  }
 }
