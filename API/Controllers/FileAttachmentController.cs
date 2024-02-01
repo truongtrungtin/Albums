@@ -71,7 +71,7 @@ public class FileAttachmentController : BaseController
                 }
             }
             file.FileUrl = await new UploadFilesLibrary(_hostingEnvironment, new JwtSettings())
-                .UploadFile(createFile.File, "FileAttachments/" + _currentUser + "/" + (profile != null ?  + profile.ProfileCode : 0));
+                .UploadFile(createFile.File, "FileAttachments/" + _currentUser + "/" + (profile != null ?   profile.ProfileId : 0));
 
             await _fileAttachmentRepository.AddAsync(file);
 
