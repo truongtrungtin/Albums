@@ -1,7 +1,7 @@
 <div class="mb-3" *ngIf="profiles">
 	<label for="profileId" class="form-label">Profiles</label>
 	<select class="form-select" id="profileId" style="width: auto;" *ngFor="let profile of profiles">
-	  <option [value]="profile.profileId">{{profile.profileName}}</option>
+	  <option value="{{profile.profileId}}">{{profile.profileName}}</option>
 	</select>
   </div>
   

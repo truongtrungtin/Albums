@@ -1,8 +1,7 @@
+import { FileDetails } from "./FileDetails";
 import { LocationImage } from "./locationImage";
 
 export interface CreateProduct{
-    name: string;
-    productType: string;
-    locationImage: LocationImage;
-    file: File
+    profileId: string;
+    file: FileDetails
 }

@@ -12,6 +12,7 @@ import { Catalog } from '../shared/models/Catalog';
 import { Profile } from '../shared/models/Profile';
 import { ProductProfilesComponent } from './product-profiles/product-profiles.component';
 import { CreateProfile } from '../shared/models/createProfile';
+import { FileDetails } from '../shared/models/FileDetails';
 
 @Component({
   selector: 'app-store',
@@ -29,96 +30,83 @@ export class StoreComponent implements OnInit {
   // Store-related data
   params: StoreParams = new StoreParams();
 
-  // Injecting StoreService for data fetching
   constructor(
     private storeService: StoreService,
     private toastr: ToastrService,
     private loadingService: LoadingService,
-
   ) { }
 
   ngOnInit() {
     this.reloadData();
   }
 
-  // Method to reload data on component initialization
+  // Reloads data on component initialization
   reloadData() {
     this.loadExtentionsAndTypes();
     this.loadFileAttachments();
   }
 
-  //#region fileAttachments
-  // Fetches products from the store service
+  // Fetches file attachments from the store service
   loadFileAttachments() {
-    this.storeService.getFileAttachments(this.params)
-      .subscribe({
-        next: (response) => {
-          const data = response.data;
-          this.params.fileAttachments = data.data;
-          this.params.page = data.pageIndex;
-          this.params.totalPages = data.totalPages;
-          this.params.totalItems = data.totalItems;
-          this.toastr.success('Products loaded');
-        },
-        error: (error) => {
-          this.handleError(error)
-        }
-      });
+    this.storeService.getFileAttachments(this.params).subscribe({
+      next: (response) => {
+        const data = response.data;
+        this.params.fileAttachments = data.data;
+        this.params.page = data.pageIndex;
+        this.params.totalPages = data.totalPages;
+        this.params.totalItems = data.totalItems;
+        this.toastr.success('Products loaded');
+      },
+      error: (error) => this.handleError(error)
+    });
   }
 
+  // Handles file upload form submission
   async onSubmitFormUpload() {
-    const files = (this.productUploadComponent.selectedFile as File[]) || [];
+    const profileId = (document.getElementById('profileId') as HTMLInputElement)?.value;
+    const files = (this.productUploadComponent.selectedFile as FileDetails[]) || [];
     if (files.length > 0) {
-      for (var i = 0; i < files.length; i++) {
+      for (let i = 0; i < files.length; i++) {
+        const locationImage = await this.onFileSelected(files[i]);
+        if (locationImage) {
+          files[i].Latitude = locationImage.Latitude.toString();
+          files[i].Longitude = locationImage.Longitude.toString();
+        }
         const product: CreateProduct = {
-          name: files[i].name,
-          locationImage: await this.onFileSelected(files[i]),
-          productType: files[i].type,
+          profileId: profileId,
           file: files[i],
         };
         this.uploadFiles(product);
       }
     } else {
-      this.handleError('Invalid files variable: not an array')
+      this.handleError('Invalid files variable: not an array');
     }
   }
+
+  // Uploads files to the server
   uploadFiles(files: CreateProduct) {
     this.storeService.uploadToServer(files).subscribe({
       next: (response) => {
         // Handle the success response
         if (response.isSuccess) {
           this.toastr.success('Upload successful');
-          this.productUploadComponent.resetFileInput();
           this.loadFileAttachments();
-          this.closebuttonupload.nativeElement.click();
           this.productUploadComponent.resetFileInput();
+          this.closebuttonupload.nativeElement.click();
         } else {
           this.toastr.error(response.message);
-          // this.handleError(error)
         }
       },
-      error: (error) => {
-        console.log(error)
-        if (error.error && error.error.errors) {
-          const validationErrors = error.error.errors;
-          this.handleError(validationErrors)
-        } else {
-          this.handleError(error)
-        }
-      },
+      error: (error) => this.handleServerError(error),
     });
   }
 
-
-  //#endregion
-
-  //#region profile
-
+  // Handles profile creation form submission
   async onSubmitFormCreateProfile() {
     const displayName = (document.getElementById('profileName') as HTMLInputElement)?.value;
     const files = (this.productProfilesComponent.selectedFile as File[]) || [];
-    if (files.length > 0) {
-      for (var i = 0; i < files.length; i++) {
+    if (displayName && files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
         const profile: CreateProfile = {
           profileName: displayName,
           avatar: files[i],
@@ -129,6 +117,8 @@ export class StoreComponent implements OnInit {
       this.handleError('Please provide a display name and select an avatar file.');
     }
   }
+
+  // Uploads profile to the server
   uploadProfile(files: CreateProfile) {
     this.storeService.uploadProfileToServer(files).subscribe({
       next: (response) => {
@@ -138,22 +128,11 @@ export class StoreComponent implements OnInit {
         this.closebuttoncreateprofile.nativeElement.click();
         this.productProfilesComponent.resetFileInput();
       },
-      error: (error) => {
-        console.log(error)
-        if (error.error && error.error.errors) {
-          const validationErrors = error.error.errors;
-          this.handleError(validationErrors)
-        } else {
-          this.handleError(error)
-        }
-      },
+      error: (error) => this.handleServerError(error),
     });
   }
 
-  //#endregion
-
-
-
+  // Extracts GPS data from the selected file
   onFileSelected(event: any): Promise<LocationImage> {
     return new Promise((resolve, reject) => {
       const file = event;
@@ -169,14 +148,14 @@ export class StoreComponent implements OnInit {
     });
   }
 
+  // Extracts GPS data from the blob
   async extractGpsData(blob: Blob): Promise<LocationImage> {
     try {
       const locationImage: LocationImage = new LocationImage();
       const gpsData = await exifr.gps(blob);
 
       if (gpsData) {
-        const latitude = gpsData.latitude;
-        const longitude = gpsData.longitude;
+        const { latitude, longitude } = gpsData;
         locationImage.Latitude = latitude;
         locationImage.Longitude = longitude;
         return locationImage;
@@ -185,51 +164,57 @@ export class StoreComponent implements OnInit {
         return locationImage;
       }
     } catch (error) {
-      throw this.handleError(error);
+      this.handleError(error);
+      return new LocationImage();
     }
   }
 
-
-
+  // Loads file extensions and types for filtering
   loadExtentionsAndTypes() {
     this.storeService.getFileExtentions().subscribe({
       next: (extentions) => this.params.fileExtentions = [{ catalogCode: "", catalogText_vi: "All" }, ...extentions],
-      error: (error) => this.handleError(error)
+      error: (error) => this.handleError(error),
     });
     this.storeService.getFileTypes().subscribe({
       next: (types) => this.params.fileTypes = [{ catalogCode: "", catalogText_vi: "All" }, ...types],
-      error: (error) => this.handleError(error)
+      error: (error) => this.handleError(error),
     });
     this.storeService.getProfiles().subscribe({
       next: (profiles) => this.params.profiles = [{ profileCode: "", profileName: "All", profileId: "", avatar: "", createBy: "" }, ...profiles],
-      error: (error) => this.handleError(error)
+      error: (error) => this.handleError(error),
     });
   }
 
+  // Handles page change event
   onPageChanged(event: PageChangedEvent) {
     this.params.page = event.page;
     this.loadFileAttachments();
   }
 
+  // Selects file extension for filtering
   selectExtention(extention: Catalog) {
     this.params.selectedFileExtention = extention;
     this.loadFileAttachments();
   }
 
+  // Selects file type for filtering
   selectType(type: Catalog) {
     this.params.selectedFileType = type;
     this.loadFileAttachments();
   }
 
+  // Selects profile for filtering
   selectProfile(profile: Profile) {
     this.params.selectedProfile = profile;
     this.loadFileAttachments();
   }
 
+  // Applies search filter
   applySearch() {
     this.loadFileAttachments();
   }
 
+  // Resets search filters
   resetSearch() {
     this.params.search = '';
     this.params.selectedFileType = { catalogCode: "", catalogText_vi: "All" };
@@ -238,12 +223,24 @@ export class StoreComponent implements OnInit {
     this.loadFileAttachments();
   }
 
+  // Applies sort filter
   applySort() {
     this.loadFileAttachments();
   }
 
+  // Handles generic errors
   private handleError(error: any) {
-    // console.error('An error occurred:', error);
     this.toastr.error(error.statusText);
+  }
+
+  // Handles server errors
+  private handleServerError(error: any) {
+    console.log(error);
+    if (error.error && error.error.errors) {
+      const validationErrors = error.error.errors;
+      this.handleError(validationErrors);
+    } else {
+      this.handleError(error);
+    }
   }
 }
