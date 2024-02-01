@@ -19,16 +19,15 @@ public class FileAttachmentModelWithExtentionAndTypeSpecification : BaseSpecific
         ApplyCriteria(x => x.FileAttachmentId == fileAttachmentId);
 
     }
-    public FileAttachmentModelWithExtentionAndTypeSpecification(string? sort, string fileExtention, string fileType, int? skip, int? take)
+    public FileAttachmentModelWithExtentionAndTypeSpecification(Guid createBy, string? sort, string? fileExtention, string? fileType,string? profile, int? skip, int? take)
     {
-        if (!string.IsNullOrWhiteSpace(fileExtention)|| !string.IsNullOrWhiteSpace(fileType))
-        {
-            ApplyCriteria(x =>
-                      (string.IsNullOrWhiteSpace(fileExtention) || x.FileExtention.ToLower().Contains(fileExtention.ToLower()))
-                      && (string.IsNullOrWhiteSpace(fileType) || x.FileType.ToLower().Contains(fileType.ToLower()))
 
-                  );
-        }
+        ApplyCriteria(x =>
+                    (string.IsNullOrWhiteSpace(fileExtention) || x.FileExtention.ToLower().Contains(fileExtention.ToLower()))
+                    && (string.IsNullOrWhiteSpace(fileType) || x.FileType.ToLower().Contains(fileType.ToLower()))
+                    && (string.IsNullOrWhiteSpace(profile) || x.ObjectId == Guid.Parse(profile))
+                    && x.CreateBy == createBy
+                ); ;
 
         if (!string.IsNullOrEmpty(sort))
         {

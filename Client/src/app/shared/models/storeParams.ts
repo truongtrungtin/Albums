@@ -25,10 +25,10 @@ export class StoreParams {
 
   selectedFileType: Catalog | null = {catalogCode: "", catalogText_vi: "All" }; // Default type selection
   selectedFileExtention: Catalog | null = {catalogCode: "", catalogText_vi: "All",  }; // Default brand selection
-  selectedProfile: Profile | null = {profileCode: "", profileName: "All", profileId: "", avatar: "", createBy: ""}; // Default type selection
+  selectedProfile: Profile | null = {profileCode: "", profileName: "Choose Profile", profileId: "", avatar: "", createBy: ""}; // Default type selection
 
   page: number = 1 ;
-  pageSize: number = 9;
+  pageSize: number = 12;
   totalPages = 0;
   totalItems = 0; 
 }

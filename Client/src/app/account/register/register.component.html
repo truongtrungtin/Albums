@@ -31,7 +31,7 @@
                             </div>
                             <div *ngIf="registrationForm.controls['email'].hasError('emailTaken')" class="text-danger">
                                 Email is already taken.
-                              </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -45,9 +45,10 @@
                                 class="text-danger">
                                 Password must be at least 6 characters
                             </div>
-                            <div *ngIf="registrationForm.controls['password'].hasError('pattern') && registrationForm.controls['password'].touched" class="text-danger">
+                            <div *ngIf="registrationForm.controls['password'].hasError('pattern') && registrationForm.controls['password'].touched"
+                                class="text-danger">
                                 Password must contain at least one non-alphanumeric character and one uppercase letter
-                              </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">Confirm Password</label>

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product } from '../shared/models/Product';
 import { Pagination } from '../shared/models/Pagination';
 import { StoreParams } from '../shared/models/storeParams';
 import { ApiResponse } from '../shared/models/ApiResponse';
@@ -15,8 +14,8 @@ import { CreateProfile } from '../shared/models/createProfile';
   providedIn: 'root',
 })
 export class StoreService {
-  // private apiUrl = 'https://api-albums.ddns.net/api/v1';
-  private apiUrl = 'https://localhost:7272/api/v1';
+  private apiUrl = 'https://api-albums.ddns.net/api/v1';
+  // private apiUrl = 'https://localhost:7272/api/v1';
   // private apiUrl = 'http://localhost:5193/api/v1';
   // Inject HttpClient for making HTTP requests
   constructor(private http: HttpClient) { }
@@ -33,7 +32,7 @@ export class StoreService {
       pageSize: storeParams.pageSize,
       fileExtention: storeParams.selectedFileExtention?.catalogCode,
       fileType: storeParams.selectedFileType?.catalogCode,
-      profile: storeParams.selectedProfile?.profileCode,
+      profile: storeParams.selectedProfile?.profileId,
       search: storeParams.search,
     }); // Construct the URL for the request
     const url = `${this.apiUrl}/FileAttachment`;
@@ -50,7 +49,7 @@ export class StoreService {
     const url = `${this.apiUrl}/FileAttachment/` + id;
     const headers = this.getHeaderAuthorization();
 
-    return this.http.get<FileAttachment>(url,{
+    return this.http.get<FileAttachment>(url, {
       headers
     });
   }
@@ -59,7 +58,7 @@ export class StoreService {
     const url = `${this.apiUrl}/Profile`;
     const headers = this.getHeaderAuthorization();
 
-    return this.http.get<Profile[]>(url,{
+    return this.http.get<Profile[]>(url, {
       headers
     });
   }
@@ -68,7 +67,7 @@ export class StoreService {
     const url = `${this.apiUrl}/FileAttachment/fileextentions`;
     const headers = this.getHeaderAuthorization();
 
-    return this.http.get<Catalog[]>(url,{
+    return this.http.get<Catalog[]>(url, {
       headers
     });
   }
@@ -77,7 +76,7 @@ export class StoreService {
     const url = `${this.apiUrl}/FileAttachment/filetypes`;
     const headers = this.getHeaderAuthorization();
 
-    return this.http.get<Catalog[]>(url,{
+    return this.http.get<Catalog[]>(url, {
       headers
     });
   }
@@ -105,13 +104,13 @@ export class StoreService {
 
   uploadProfileToServer(profile: CreateProfile): Observable<Profile> {
     const formData = new FormData();
-  
+
     // Append product properties
     formData.append('profileName', profile.profileName);
     formData.append('avatar', profile.avatar, profile.avatar.name);
 
     const headers = this.getHeaderAuthorization();
-  
+
     return this.http.post<any>(`${this.apiUrl}/Profile`, formData, {
       headers,
     });
@@ -120,23 +119,17 @@ export class StoreService {
 
   uploadToServer(createProduct: CreateProduct): Observable<ApiResponse<Pagination<FileAttachment>>> {
     const formData = new FormData();
-  
-    // Append product properties
-    formData.append('name', createProduct.file.name);
-    formData.append('file', createProduct.file, createProduct.file.name);
+    formData.append('profileId', createProduct.profileId);
+    formData.append('file', createProduct.file);
 
-    if (createProduct.locationImage) {
-      formData.append('locationImage.latitude', createProduct.locationImage.Latitude.toString());
-      formData.append('locationImage.longitude', createProduct.locationImage.Longitude.toString());
+    if (createProduct.latitude && createProduct.longitude) {
+      formData.append('latitude', createProduct.latitude);
+      formData.append('longitude', createProduct.longitude);
     }
-  
     const headers = this.getHeaderAuthorization();
-  
-    return this.http.post<any>(`${this.apiUrl}/FileAttachment/`, formData, {
-      headers,
-    });
+
+    return this.http.post<any>(`${this.apiUrl}/FileAttachment/`, formData, { headers });
   }
-  
-  
+
 
 }

@@ -10,8 +10,8 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 })
 export class AccountService {
 
-  // private apiUrl = 'https://api-albums.ddns.net/api/Account/';
-  private apiUrl = 'https://localhost:7272/api/Account/';
+  private apiUrl = 'https://api-albums.ddns.net/api/Account/';
+  // private apiUrl = 'https://localhost:7272/api/Account/';
   // private apiUrl = 'http://localhost:5193/api/Account/';
 
   private userSource = new BehaviorSubject<User | null>(null);
@@ -82,6 +82,7 @@ export class AccountService {
       this.userSource.next(user);
     } else {
       localStorage.removeItem('token');
+      this.userSource.next(null);
     }
   }
 

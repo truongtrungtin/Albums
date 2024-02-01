@@ -12,7 +12,6 @@ import { Catalog } from '../shared/models/Catalog';
 import { Profile } from '../shared/models/Profile';
 import { ProductProfilesComponent } from './product-profiles/product-profiles.component';
 import { CreateProfile } from '../shared/models/createProfile';
-import { FileDetails } from '../shared/models/FileDetails';
 
 @Component({
   selector: 'app-store',
@@ -56,6 +55,7 @@ export class StoreComponent implements OnInit {
         this.params.totalPages = data.totalPages;
         this.params.totalItems = data.totalItems;
         this.toastr.success('Products loaded');
+        console.log(data)
       },
       error: (error) => this.handleError(error)
     });
@@ -64,19 +64,22 @@ export class StoreComponent implements OnInit {
   // Handles file upload form submission
   async onSubmitFormUpload() {
     const profileId = (document.getElementById('profileId') as HTMLInputElement)?.value;
-    const files = (this.productUploadComponent.selectedFile as FileDetails[]) || [];
+    const files = (this.productUploadComponent.selectedFile as File[]) || [];
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const locationImage = await this.onFileSelected(files[i]);
-        if (locationImage) {
-          files[i].Latitude = locationImage.Latitude.toString();
-          files[i].Longitude = locationImage.Longitude.toString();
-        }
-        const product: CreateProduct = {
+       
+        const file: CreateProduct = {
           profileId: profileId,
           file: files[i],
+          latitude: null,
+          longitude: null
         };
-        this.uploadFiles(product);
+        if (locationImage) {
+          file.latitude = locationImage.Latitude.toString();
+          file.longitude = locationImage.Longitude.toString();
+        }
+        this.uploadFiles(file);
       }
     } else {
       this.handleError('Invalid files variable: not an array');
@@ -87,7 +90,6 @@ export class StoreComponent implements OnInit {
   uploadFiles(files: CreateProduct) {
     this.storeService.uploadToServer(files).subscribe({
       next: (response) => {
-        // Handle the success response
         if (response.isSuccess) {
           this.toastr.success('Upload successful');
           this.loadFileAttachments();
@@ -97,8 +99,23 @@ export class StoreComponent implements OnInit {
           this.toastr.error(response.message);
         }
       },
-      error: (error) => this.handleServerError(error),
+      error: (error) => {
+        console.log(error);
+        if (error.error && error.error.errors) {
+          const validationErrors = error.error.errors;
+          this.handleValidationErrors(validationErrors);
+        } else {
+          this.handleServerError(error);
+        }
+      },
     });
+  }
+
+  private handleValidationErrors(validationErrors: any) {
+    // Implement logic to handle and display validation errors in your UI
+    console.error('Validation Errors:', JSON.stringify(validationErrors));
+    // For example, you could display validation errors in a toast or alert
+    this.toastr.error('Validation Errors: ' + JSON.stringify(validationErrors));
   }
 
   // Handles profile creation form submission
@@ -131,6 +148,9 @@ export class StoreComponent implements OnInit {
       error: (error) => this.handleServerError(error),
     });
   }
+
+  
+
 
   // Extracts GPS data from the selected file
   onFileSelected(event: any): Promise<LocationImage> {
@@ -180,7 +200,7 @@ export class StoreComponent implements OnInit {
       error: (error) => this.handleError(error),
     });
     this.storeService.getProfiles().subscribe({
-      next: (profiles) => this.params.profiles = [{ profileCode: "", profileName: "All", profileId: "", avatar: "", createBy: "" }, ...profiles],
+      next: (profiles) => this.params.profiles = [{ profileCode: "", profileName: "My Profile ", profileId: "", avatar: "", createBy: "" }, ...profiles],
       error: (error) => this.handleError(error),
     });
   }

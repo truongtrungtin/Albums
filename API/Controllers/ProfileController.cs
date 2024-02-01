@@ -62,7 +62,7 @@ namespace API.Controllers
         // POST api/<ValuesController>
         [HttpPost]
         [DisableRequestSizeLimit]
-        public async Task<ActionResult> Post([FromForm] CreateProfileViewModel createProfile)
+        public async Task<ActionResult> Post([FromQuery] CreateProfileViewModel createProfile)
         {
             try
             {

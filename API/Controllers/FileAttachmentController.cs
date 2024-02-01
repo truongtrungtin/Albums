@@ -19,7 +19,7 @@ public class FileAttachmentController : BaseController
 {
     private readonly IRepository<FileAttachmentModel> _fileAttachmentRepository;
 
-    private Guid? _currentUser;
+    private Guid _currentUser;
 
     public FileAttachmentController(
         IRepository<FileAttachmentModel> fileAttachmentRepository,
@@ -37,7 +37,7 @@ public class FileAttachmentController : BaseController
     // POST: api/v1/products
     [HttpPost]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> Add([FromForm] CreateFile createProduct)
+    public async Task<ActionResult> Add([FromForm] CreateFileAttachment createFile)
     {
 
         try
@@ -50,24 +50,28 @@ public class FileAttachmentController : BaseController
             var file = new FileAttachmentModel()
             {
                 FileAttachmentId = Guid.NewGuid(),
-                ObjectId = Guid.NewGuid(),
-                FileAttachmentCode = _unitOfWork.UtilitiesRepository.GetFileTypeByExtension(createProduct.File.ContentType),
-                FileAttachmentName = createProduct.File.FileName,
-                FileType = createProduct.File.ContentType,
-                Size = createProduct.File.Length,
-                Latitude = createProduct.LocationImage?.Latitude,
-                Longitude = createProduct.LocationImage?.Longitude,
-                FileExtention = _unitOfWork.UtilitiesRepository.FileExtension(createProduct.File.FileName),
+                FileAttachmentCode = _unitOfWork.UtilitiesRepository.GetFileTypeByExtension(createFile.File.ContentType),
+                FileAttachmentName = createFile.File.FileName,
+                FileType = createFile.File.ContentType,
+                Size = createFile.File.Length,
+                Latitude = !string.IsNullOrEmpty(createFile.Latitude) ? createFile.Latitude : null,
+                Longitude = !string.IsNullOrEmpty(createFile.Longitude) ? createFile.Longitude : null,
+                FileExtention = _unitOfWork.UtilitiesRepository.FileExtension(createFile.File.FileName),
                 CreateBy = _currentUser,
                 CreateTime = DateTime.UtcNow,
 
             };
-            if (createProduct.ProfileId.HasValue && Guid.Empty != createProduct.ProfileId)
+            if (createFile.ProfileId.HasValue && Guid.Empty != createFile.ProfileId)
             {
-                profile = _context.ProfileModel.FirstOrDefault(x => x.ProfileId == createProduct.ProfileId);
+                profile = _context.ProfileModel.FirstOrDefault(x => x.ProfileId == createFile.ProfileId);
+                if (profile != null)
+                {
+                    file.ObjectId = profile.ProfileId;
+
+                }
             }
             file.FileUrl = await new UploadFilesLibrary(_hostingEnvironment, new JwtSettings())
-                .UploadFile(createProduct.File, "FileAttachments/" + _currentUser + "" + (profile != null ? "/" + profile.ProfileCode : ""));
+                .UploadFile(createFile.File, "FileAttachments/" + _currentUser + "/" + (profile != null ?  + profile.ProfileCode : 0));
 
             await _fileAttachmentRepository.AddAsync(file);
 
@@ -164,23 +168,26 @@ public class FileAttachmentController : BaseController
     {
         try
         {
+            _currentUser = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             // action inside a standard controller
             var sort = fileAttachmentParams.Sort;
             var search = fileAttachmentParams.Search;
             var fileExtention = fileAttachmentParams.FileExtention;
             var fileType = fileAttachmentParams.FileType;
+            var profile = fileAttachmentParams.profile;
             var page = fileAttachmentParams.Page;
             var pageSize = fileAttachmentParams.PageSize;
             var skip = fileAttachmentParams.GetSkip();
 
-            var countSpec = new FileAttachmentCountSpecification(fileExtention, fileType);
+            var countSpec = new FileAttachmentCountSpecification(_currentUser, fileExtention, fileType, profile);
             var totalItems = await _fileAttachmentRepository.CountAsync(countSpec);
             if (totalItems == 0)
             {
                 return Ok(new Pagination<FileAttachmentViewModel>(page, 0, pageSize, totalItems, new List<FileAttachmentViewModel>()));
             }
 
-            var spec = new FileAttachmentModelWithExtentionAndTypeSpecification(sort, fileExtention, fileType, skip, pageSize);
+            var spec = new FileAttachmentModelWithExtentionAndTypeSpecification(_currentUser, sort, fileExtention, fileType,profile, skip, pageSize);
             var files = await _fileAttachmentRepository.ListAsync(spec);
             var data = new List<FileAttachmentViewModel> { };
 
@@ -190,7 +197,7 @@ public class FileAttachmentController : BaseController
                 {
 
                     #region Url
-                    item.FileUrl = Path.Combine(item.FileUrl);
+                    item.FileUrl = Path.Combine("/Upload/FileAttachments/" + _currentUser + "/" + (item.ObjectId != null && item.ObjectId != Guid.Empty ? item.ObjectId + "/" : "0/" + item.FileUrl));
                     #endregion
                     data.Add(new FileAttachmentViewModel
                     {
@@ -198,7 +205,8 @@ public class FileAttachmentController : BaseController
                         FileAttachmentName = item.FileAttachmentName,
                         FileUrl = item.FileUrl,
                         FileExtention = item.FileExtention,
-                        Size = item.Size
+                        FileType = item.FileType,
+                        Size = item.Size,
                     });
                 }
 

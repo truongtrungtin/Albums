@@ -28,22 +28,12 @@ export class NavBarComponent {
 
     Logout(){
       this.accountService.logout();
-      this.router.navigate(['/']); 
+      this.triggerChangeDetection();
+      this.router.navigate(['/account/login']); 
     }
 
-    // triggerChangeDetection(){
-    //   this.cdr.detectChanges();
-    // }
-
-    collapseNavbar() {
-      const navbar = document.getElementById('navbarNav');
-      
-      // Check if navbar is not null before attempting to manipulate it
-      if (navbar !== null) {
-        if (navbar.classList.contains('show')) {
-          navbar.classList.remove('show');
-        }
-      }
+    triggerChangeDetection(){
+      this.cdr.detectChanges();
     }
-    
+
 }

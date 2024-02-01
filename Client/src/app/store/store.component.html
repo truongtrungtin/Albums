@@ -12,7 +12,7 @@
       <h5 class="text-primary ml-3">Profile</h5>
       <ul class="list-group my-3">
         <li class="list-group-item  list-group-item-action" *ngFor="let profile of params.profiles"
-          [class.selected]=" profile.profileCode === params.selectedProfile?.profileCode"
+          [class.selected]=" profile.profileId === params.selectedProfile?.profileId"
           (click)="selectProfile(profile)">
           {{ profile.profileName }}
         </li>

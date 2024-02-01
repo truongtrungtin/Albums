@@ -1,7 +1,8 @@
-import { FileDetails } from "./FileDetails";
-import { LocationImage } from "./locationImage";
 
-export interface CreateProduct{
+export interface CreateProduct {
     profileId: string;
-    file: FileDetails
-}
+    file: File;
+    latitude: string | null;
+    longitude: string | null;
+  }
+  

@@ -29,7 +29,9 @@ export class RegisterComponent {
         asyncValidators: [this.emailAsyncValidator.bind(this)],
         updateOn: 'blur' // Trigger the async validation on blur
       }],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+      password: ['', {
+        Validators: [Validators.required, Validators.minLength(6),this.passwordValidator],
+      }],
       confirmPassword: ['', [Validators.required]],
       displayName: ['', [Validators.required]],
     }, { validators: this.passwordMatchValidator });

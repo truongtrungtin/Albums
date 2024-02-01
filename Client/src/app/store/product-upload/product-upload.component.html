@@ -1,13 +1,13 @@
-<div class="mb-3" *ngIf="profiles">
-	<label for="profileId" class="form-label">Profiles</label>
-	<select class="form-select" id="profileId" style="width: auto;" *ngFor="let profile of profiles">
-	  <option value="{{profile.profileId}}">{{profile.profileName}}</option>
-	</select>
-  </div>
-  
+<div class="mb-3">
+    <label for="profileId" class="form-label">Profiles</label>
+    <select class="form-select" id="profileId" name="profileId">
+        <option *ngFor="let profile of profiles" [value]="profile.profileId">{{profile.profileName}}</option>
+    </select>
+</div>
 
-  <div class="mb-3">
-	<label for="file" class="form-label">Files</label>
-	<input type="file" #fileInputRef class="form-control" multiple (change)="onSelectFile($event)" id="file">
-  </div>
-  
+<div class="mb-3">
+    <label for="file" class="form-label">Files</label>
+    <input type="file" #fileInputRef class="form-control" multiple (change)="onSelectFile($event)" id="file" required>
+    <!-- Display an error message if no file is selected -->
+    <div *ngIf="!fileInputRef.files?.length" class="text-danger">Please select at least one file.</div>
+</div>
