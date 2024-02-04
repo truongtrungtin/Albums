@@ -21,6 +21,7 @@ namespace Infrastructure.Data.Models
         public IMapper _mapper;
         public IHostingEnvironment _hostingEnvironment;
         public IRepository<CatalogModel> _catalogRepository;
+        public Guid _currentUser;
 
         //public List<ExcelHeadingTemplate> heading = new List<ExcelHeadingTemplate>();
         protected BaseController()

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StoreService } from '../store.service';
 import { ActivatedRoute } from '@angular/router';
-import { Product } from 'src/app/shared/models/Product';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { BasketService } from 'src/app/basket/basket.service';
 import { FileAttachment } from 'src/app/shared/models/FileAttachment';

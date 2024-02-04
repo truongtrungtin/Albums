@@ -29,7 +29,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.toastr.error('Internal server error', 'Error 500');
         } else if (error.status === 401) {
           // Redirect to the Server Error route
-          this.router.navigate(['/401']);
+          this.router.navigate(['/account/login']);
           this.toastr.error('Unauthorized', 'Error 401');
         }else if (error.status === 0) {
           // Redirect to the Connection Refused route

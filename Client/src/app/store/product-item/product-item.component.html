@@ -1,73 +1,13 @@
 <!-- product-item.component.html -->
-<!-- Check if the item is an image -->
-<ng-container *ngIf="file && (isImage() || isVideo())">
-  <ng-container *ngIf="isImage()">
-    <button type="button" class="btn" data-bs-toggle="modal" [attr.data-bs-target]="'#modal_' + file.fileAttachmentId">
-      <img [src]="'https://api-albums.ddns.net' + file.fileUrl" [alt]="file.fileAttachmentName"
-        class="w-100 shadow-1-strong rounded" alt="Boat on Calm Water" />
-      <div class="image-icons">
-        <i class="fa fa-info-circle" (click)="showImageInfo()"></i>
-        <i class="fa fa-download" (click)="downloadFile()" title="Download Image"></i>
-      </div>
-    </button>
-    <div class="modal modal-lg fade" [attr.id]="'modal_' + file.fileAttachmentId" tabindex="-1" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Image</h5>
-            <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body mh-50">
-            <img [src]="'https://api-albums.ddns.net'+ file.fileUrl" [alt]="file.fileAttachmentName"
-              class="w-100 shadow-1-strong rounded" />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"> <i class="fa fa-trash"
-                title="Delete Image"></i></button>
-            <button type="submit" class="btn btn-primary" (click)="downloadFile()"> <i class="fa fa-download"
-                title="Download Image"></i>
-            </button>
-            <!-- Change the button type to submit to trigger ngSubmit -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="isVideo()">
-    <button type="button" class="btn" data-bs-toggle="modal"  [attr.data-bs-target]="'#modal_' + file.fileAttachmentId">
-      <video class="w-100 shadow-1-strong rounded">
-        <source  [src]="'https://api-albums.ddns.net' + file.fileUrl"  [type]="file.fileType">
-        Your browser does not support the video tag.
-      </video>
-    </button>
-    <div class="modal modal-lg fade" [attr.id]="'modal_' + file.fileAttachmentId" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Image</h5>
-          <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <video  class="w-100 shadow-1-strong rounded">
-            <source [src]="'https://api-albums.ddns.net' + file.fileUrl"  [type]="file.fileType">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"> <i class="fa fa-trash"
-              title="Delete"></i></button>
-          <button type="submit" class="btn btn-primary" (click)="downloadFile()"> <i class="fa fa-download"
-              title="Download"></i>
-          </button>
-          <!-- Change the button type to submit to trigger ngSubmit -->
-        </div>
-      </div>
-    </div>
-  </div>
-   
-  </ng-container>
-</ng-container>
+
+<button *ngIf="file && isImage()" type="button" class="btn" data-bs-toggle="modal"
+  [attr.data-bs-target]="'#modal_' + file.fileAttachmentId" (click)="openModalImage()">
+  <img [src]="file.fileUrl" [alt]="file.fileAttachmentName" class="w-100 shadow-1-strong rounded"
+    alt="{{file.fileAttachmentName}}" />
+</button>
+<button *ngIf=" file &&isVideo()" type="button" class="btn" data-bs-toggle="modal"
+  [attr.data-bs-target]="'#modal_' + file.fileAttachmentId" (click)="openModalVideo()">
+  <video class="w-100 shadow-1-strong rounded" [src]="file.fileUrl" controls>
+    Your browser does not support the video tag.
+  </video>
+</button>

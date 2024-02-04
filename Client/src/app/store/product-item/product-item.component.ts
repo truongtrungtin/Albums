@@ -1,33 +1,30 @@
 // product-item.component.ts
 
-import { Component, Input, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
-import { BasketService } from 'src/app/basket/basket.service';
+import { Component, Input, OnInit, ViewChild, inject} from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FileAttachment } from 'src/app/shared/models/FileAttachment';
-import { Product } from 'src/app/shared/models/Product';
+import { ModalImageComponent } from '../modal-image/modal-image.component';
+import { ModalVideoComponent } from '../modal-video/modal-video.component';
+
+
 
 @Component({
   selector: 'app-product-item',
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.scss']
 })
-export class ProductItemComponent {
+export class ProductItemComponent{
   @Input() file: FileAttachment | null = null;
+  private modalService = inject(NgbModal);
 
-  constructor(private basketService: BasketService, private el: ElementRef) {}
-
-  extractImageName(): string | null {
-    if (this.file && this.file.fileUrl) {
-      const parts = this.file.fileUrl.split('/');
-      if (parts.length > 0) {
-        return parts[parts.length - 1];
-      }
-    }
-    return null;
+  openModalImage() {
+    const modalRef = this.modalService.open(ModalImageComponent);
+		modalRef.componentInstance.file = this.file;
   }
-
-  // addItemToBasket() {
-  //   this.file && this.basketService.addItemToBasket(this.file);
-  // }
+  openModalVideo() {
+    const modalRef = this.modalService.open(ModalVideoComponent);
+		modalRef.componentInstance.file = this.file;
+  }
 
   isImage(): boolean {
     return !!this.file && this.isImageType(this.file.fileExtention);
@@ -45,28 +42,6 @@ export class ProductItemComponent {
   private isVideoType(type: string): boolean {
     const videoExtensions = ['.hevc', '.mp4', '.mov']; // Added 'mov' for MOV files
     return videoExtensions.includes(type.toLowerCase());
-  }
-  downloadFile() {
-    // Implement the download logic based on the file type (image or video)
-    if (this.isImage()) {
-      // For image download logic
-      const imageName = this.extractImageName();
-      if (imageName) {
-        const imageUrl = 'assets/images/files/' + imageName;
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = imageName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } else if (this.isVideo()) {
-      // For video download logic
-      if (this.file && this.file.fileUrl) {
-        const videoUrl = this.file.fileUrl; // Replace with the actual video URL
-        window.open(videoUrl, '_blank');
-      }
-    }
   }
 
   showImageInfo() {

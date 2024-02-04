@@ -1,5 +1,4 @@
 import { Time } from "@angular/common";
-import { LocationImage } from "./locationImage";
 
 export interface Product {
   productId: string;

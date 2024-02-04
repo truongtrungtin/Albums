@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Infrastructure.Data.Library;
 using Infrastructure.Data.Models;
 using Infrastructure.Data.Responses;
+using Infrastructure.Data.Specifications;
 using Infrastructure.Data.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -17,7 +18,6 @@ namespace API.Controllers
     public class ProfileController : BaseController
     {
         private readonly IRepository<ProfileModel> _profileRepository;
-        private Guid? _currentUser;
 
         public ProfileController(
         IRepository<ProfileModel> profileRepository,
@@ -34,7 +34,10 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var profiles = await _profileRepository.ListAsync();
+            _currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var spec = new ProfileSpecification(_currentUser);
+            var profiles = await _profileRepository.ListAsync(spec);
             var data = new List<ProfileViewModel>();
             foreach (var item in profiles)
             {
@@ -43,8 +46,8 @@ namespace API.Controllers
                     ProfileId = item.ProfileId,
                     ProfileCode = item.ProfileCode,
                     ProfileName = item.FirstName,
-                    Avatar = item.Avatar,
-                    CreateBy = item.CreateBy,   
+                    Avatar = "https://api-albums.ddns.net/Upload/FileAttachments/"+_currentUser + "/" + item.ProfileId + "/" +item.Avatar,
+                    CreateBy = item.CreateBy,
                     Actived = item.Actived,
                 });
             }
@@ -62,7 +65,7 @@ namespace API.Controllers
         // POST api/<ValuesController>
         [HttpPost]
         [DisableRequestSizeLimit]
-        public async Task<ActionResult> Post([FromQuery] CreateProfileViewModel createProfile)
+        public async Task<ActionResult> Post([FromForm] CreateProfileViewModel createProfile)
         {
             try
             {
@@ -70,14 +73,14 @@ namespace API.Controllers
 
                 var data = new ProfileModel()
                 {
-                    ProfileId= Guid.NewGuid(),
+                    ProfileId = Guid.NewGuid(),
                     FirstName = createProfile.ProfileName,
                     CreateTime = DateTime.Now,
-                    CreateBy= _currentUser,
+                    CreateBy = _currentUser,
                     Actived = true
                 };
                 data.Avatar = await new UploadFilesLibrary(_hostingEnvironment, new JwtSettings())
-               .UploadFile(createProfile.Avatar, "FileAttachments/"+_currentUser+"/"+data.ProfileId);
+               .UploadFile(createProfile.Avatar, "FileAttachments/" + _currentUser + "/" + data.ProfileId);
 
                 await _profileRepository.AddAsync(data);
                 return Ok(new ApiResponse()

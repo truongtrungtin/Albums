@@ -8,19 +8,18 @@ import { PaginationHeaderComponent } from './components/pagination-header/pagina
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { OrderTotalsComponent } from './components/order-totals/order-totals.component';
 
-
 @NgModule({
   declarations: [
     PaginationHeaderComponent,
     PaginationComponent,
-    OrderTotalsComponent
+    OrderTotalsComponent,
   ],
   imports: [ 
     CommonModule,
     PaginationModule,
     FormsModule,
     CarouselModule, 
-    MatInputModule
+    MatInputModule,
   ],
   exports:[
     PaginationHeaderComponent,
@@ -30,7 +29,7 @@ import { OrderTotalsComponent } from './components/order-totals/order-totals.com
     CarouselModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
   ]
 })
 export class SharedModule { }

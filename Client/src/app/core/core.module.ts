@@ -9,7 +9,7 @@ import { ConnectionRefusedComponent } from './connection-refused/connection-refu
 import { SectionHeaderComponent } from './section-header/section-header.component';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -19,7 +19,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
     ServerErrorComponent,
     ConnectionRefusedComponent,
     UnauthorizedComponent,
-    SectionHeaderComponent
+    SectionHeaderComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +29,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
       preventDuplicates: true,
     }),
     BreadcrumbModule,
+    DropdownModule
   ],
   exports: [
     NavBarComponent,
@@ -36,7 +37,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
     ServerErrorComponent,
     ConnectionRefusedComponent,
     UnauthorizedComponent,
-    SectionHeaderComponent
+    SectionHeaderComponent,
   ]
 })
 export class CoreModule { }

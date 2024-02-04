@@ -28,7 +28,7 @@ export class StoreParams {
   selectedProfile: Profile | null = {profileCode: "", profileName: "Choose Profile", profileId: "", avatar: "", createBy: ""}; // Default type selection
 
   page: number = 1 ;
-  pageSize: number = 12;
+  pageSize: number = 24;
   totalPages = 0;
   totalItems = 0; 
 }

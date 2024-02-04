@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Profile } from 'src/app/shared/models/Profile';
 
 @Component({
@@ -10,9 +10,8 @@ export class ProductUploadComponent {
   files: File[] = [];
   selectedFile: File[] = [];
   @Input() profiles:  Profile[] = [];
-
+  selectedprofile: Profile | undefined;
   @ViewChild('fileInputRef') fileInputRef: any;
-
   onSelect(event: any) {
     this.files.push(...event.addedFiles);
   }

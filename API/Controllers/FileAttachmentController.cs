@@ -19,7 +19,6 @@ public class FileAttachmentController : BaseController
 {
     private readonly IRepository<FileAttachmentModel> _fileAttachmentRepository;
 
-    private Guid _currentUser;
 
     public FileAttachmentController(
         IRepository<FileAttachmentModel> fileAttachmentRepository,
@@ -42,9 +41,8 @@ public class FileAttachmentController : BaseController
 
         try
         {
-            _currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
-
             var profile = new ProfileModel();
+            _currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
 
 
             var file = new FileAttachmentModel()
@@ -71,9 +69,9 @@ public class FileAttachmentController : BaseController
                 }
             }
             file.FileUrl = await new UploadFilesLibrary(_hostingEnvironment, new JwtSettings())
-                .UploadFile(createFile.File, "FileAttachments/" + _currentUser + "/" + (profile != null ?   profile.ProfileId : 0));
+                .UploadFile(createFile.File, "FileAttachments/" + _currentUser + "/" + (profile != null ? profile.ProfileId : Guid.Empty));
 
-            await _fileAttachmentRepository.AddAsync(file);
+            _fileAttachmentRepository.AddAsync(file).Wait();
 
 
             // Return the created product
@@ -168,17 +166,16 @@ public class FileAttachmentController : BaseController
     {
         try
         {
-            _currentUser = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             // action inside a standard controller
             var sort = fileAttachmentParams.Sort;
             var search = fileAttachmentParams.Search;
             var fileExtention = fileAttachmentParams.FileExtention;
             var fileType = fileAttachmentParams.FileType;
-            var profile = fileAttachmentParams.profile;
+            var profile = fileAttachmentParams.profile ?? Guid.Empty;
             var page = fileAttachmentParams.Page;
             var pageSize = fileAttachmentParams.PageSize;
             var skip = fileAttachmentParams.GetSkip();
+            _currentUser = Guid.Parse(User?.FindFirstValue(ClaimTypes.NameIdentifier));
 
             var countSpec = new FileAttachmentCountSpecification(_currentUser, fileExtention, fileType, profile);
             var totalItems = await _fileAttachmentRepository.CountAsync(countSpec);
@@ -187,7 +184,7 @@ public class FileAttachmentController : BaseController
                 return Ok(new Pagination<FileAttachmentViewModel>(page, 0, pageSize, totalItems, new List<FileAttachmentViewModel>()));
             }
 
-            var spec = new FileAttachmentModelWithExtentionAndTypeSpecification(_currentUser, sort, fileExtention, fileType,profile, skip, pageSize);
+            var spec = new FileAttachmentModelWithExtentionAndTypeSpecification(_currentUser, sort, fileExtention, fileType, profile, skip, pageSize);
             var files = await _fileAttachmentRepository.ListAsync(spec);
             var data = new List<FileAttachmentViewModel> { };
 
@@ -197,7 +194,7 @@ public class FileAttachmentController : BaseController
                 {
 
                     #region Url
-                    item.FileUrl = Path.Combine("/Upload/FileAttachments/" + _currentUser + "/" + (item.ObjectId != null && item.ObjectId != Guid.Empty ? item.ObjectId + "/" : "0/" + item.FileUrl));
+                    item.FileUrl = Path.Combine("https://api-albums.ddns.net/Upload/FileAttachments/" + _currentUser + "/" + (item.ObjectId != null && item.ObjectId != Guid.Empty ? item.ObjectId + "/" : Guid.Empty + "/") + item.FileUrl);
                     #endregion
                     data.Add(new FileAttachmentViewModel
                     {

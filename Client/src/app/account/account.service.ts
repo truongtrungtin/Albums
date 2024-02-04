@@ -10,8 +10,8 @@ import { ToastrService } from 'ngx-toastr'; // Import ToastrService
 })
 export class AccountService {
 
-  private apiUrl = 'https://api-albums.ddns.net/api/Account/';
-  // private apiUrl = 'https://localhost:7272/api/Account/';
+  // private apiUrl = 'https://api-albums.ddns.net/api/Account/';
+  private apiUrl = 'https://localhost:7272/api/Account/';
   // private apiUrl = 'http://localhost:5193/api/Account/';
 
   private userSource = new BehaviorSubject<User | null>(null);
@@ -29,9 +29,7 @@ export class AccountService {
         return response.data;
       }),
       catchError((error) => {
-        console.log(error);
         // Handle registration error
-        this.toastr.error(error.message);
         return throwError(() => new Error(error.message));
 
       })
@@ -107,7 +105,7 @@ export class AccountService {
       catchError((error) => {
         // Rethrow the error to propagate it to the caller
         return throwError(() => {
-          this.toastr.error(error.statusText,'Error loading user');
+          this.setUser(null);
         });
       })
     );

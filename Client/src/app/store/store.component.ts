@@ -6,8 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProductUploadComponent } from './product-upload/product-upload.component';
 import * as exifr from 'exifr';
 import { LocationImage } from '../shared/models/locationImage';
-import { CreateProduct } from '../shared/models/createProduct';
-import { LoadingService } from '../core/services/loading.service';
+import { CreateFileAttachment } from '../shared/models/CreateFileAttachment';
 import { Catalog } from '../shared/models/Catalog';
 import { Profile } from '../shared/models/Profile';
 import { ProductProfilesComponent } from './product-profiles/product-profiles.component';
@@ -16,12 +15,14 @@ import { CreateProfile } from '../shared/models/createProfile';
 @Component({
   selector: 'app-store',
   templateUrl: './store.component.html',
-  styleUrls: ['./store.component.scss']
+  styleUrls: ['./store.component.scss'],
 })
 export class StoreComponent implements OnInit {
   @Input() title: string = '';
-  @ViewChild(ProductUploadComponent) productUploadComponent!: ProductUploadComponent;
-  @ViewChild(ProductProfilesComponent) productProfilesComponent!: ProductProfilesComponent;
+  @ViewChild(ProductUploadComponent)
+  productUploadComponent!: ProductUploadComponent;
+  @ViewChild(ProductProfilesComponent)
+  productProfilesComponent!: ProductProfilesComponent;
 
   @ViewChild('closebuttonupload') closebuttonupload: any;
   @ViewChild('closebuttoncreateprofile') closebuttoncreateprofile: any;
@@ -31,9 +32,8 @@ export class StoreComponent implements OnInit {
 
   constructor(
     private storeService: StoreService,
-    private toastr: ToastrService,
-    private loadingService: LoadingService,
-  ) { }
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.reloadData();
@@ -55,9 +55,9 @@ export class StoreComponent implements OnInit {
         this.params.totalPages = data.totalPages;
         this.params.totalItems = data.totalItems;
         this.toastr.success('Products loaded');
-        console.log(data)
+        console.log(data);
       },
-      error: (error) => this.handleError(error)
+      error: (error) => this.handleError(error),
     });
   }
 
@@ -68,12 +68,12 @@ export class StoreComponent implements OnInit {
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const locationImage = await this.onFileSelected(files[i]);
-       
-        const file: CreateProduct = {
+
+        const file: CreateFileAttachment = {
           profileId: profileId,
           file: files[i],
           latitude: null,
-          longitude: null
+          longitude: null,
         };
         if (locationImage) {
           file.latitude = locationImage.Latitude.toString();
@@ -87,7 +87,7 @@ export class StoreComponent implements OnInit {
   }
 
   // Uploads files to the server
-  uploadFiles(files: CreateProduct) {
+  uploadFiles(files: CreateFileAttachment) {
     this.storeService.uploadToServer(files).subscribe({
       next: (response) => {
         if (response.isSuccess) {
@@ -100,7 +100,6 @@ export class StoreComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.log(error);
         if (error.error && error.error.errors) {
           const validationErrors = error.error.errors;
           this.handleValidationErrors(validationErrors);
@@ -120,7 +119,9 @@ export class StoreComponent implements OnInit {
 
   // Handles profile creation form submission
   async onSubmitFormCreateProfile() {
-    const displayName = (document.getElementById('profileName') as HTMLInputElement)?.value;
+    const displayName = (
+      document.getElementById('profileName') as HTMLInputElement
+    )?.value;
     const files = (this.productProfilesComponent.selectedFile as File[]) || [];
     if (displayName && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
@@ -131,7 +132,9 @@ export class StoreComponent implements OnInit {
         this.uploadProfile(profile);
       }
     } else {
-      this.handleError('Please provide a display name and select an avatar file.');
+      this.handleError(
+        'Please provide a display name and select an avatar file.'
+      );
     }
   }
 
@@ -148,9 +151,6 @@ export class StoreComponent implements OnInit {
       error: (error) => this.handleServerError(error),
     });
   }
-
-  
-
 
   // Extracts GPS data from the selected file
   onFileSelected(event: any): Promise<LocationImage> {
@@ -192,15 +192,33 @@ export class StoreComponent implements OnInit {
   // Loads file extensions and types for filtering
   loadExtentionsAndTypes() {
     this.storeService.getFileExtentions().subscribe({
-      next: (extentions) => this.params.fileExtentions = [{ catalogCode: "", catalogText_vi: "All" }, ...extentions],
+      next: (extentions) =>
+        (this.params.fileExtentions = [
+          { catalogCode: '', catalogText_vi: 'All' },
+          ...extentions,
+        ]),
       error: (error) => this.handleError(error),
     });
     this.storeService.getFileTypes().subscribe({
-      next: (types) => this.params.fileTypes = [{ catalogCode: "", catalogText_vi: "All" }, ...types],
+      next: (types) =>
+        (this.params.fileTypes = [
+          { catalogCode: '', catalogText_vi: 'All' },
+          ...types,
+        ]),
       error: (error) => this.handleError(error),
     });
     this.storeService.getProfiles().subscribe({
-      next: (profiles) => this.params.profiles = [{ profileCode: "", profileName: "My Profile ", profileId: "", avatar: "", createBy: "" }, ...profiles],
+      next: (profiles) =>
+        (this.params.profiles = [
+          {
+            profileCode: '',
+            profileName: 'My Profile ',
+            profileId: '',
+            avatar: '',
+            createBy: '',
+          },
+          ...profiles,
+        ]),
       error: (error) => this.handleError(error),
     });
   }
@@ -237,8 +255,11 @@ export class StoreComponent implements OnInit {
   // Resets search filters
   resetSearch() {
     this.params.search = '';
-    this.params.selectedFileType = { catalogCode: "", catalogText_vi: "All" };
-    this.params.selectedFileExtention = { catalogCode: "", catalogText_vi: "All" };
+    this.params.selectedFileType = { catalogCode: '', catalogText_vi: 'All' };
+    this.params.selectedFileExtention = {
+      catalogCode: '',
+      catalogText_vi: 'All',
+    };
     this.params.sort = 'NameAsc';
     this.loadFileAttachments();
   }

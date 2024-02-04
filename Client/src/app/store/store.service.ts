@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Pagination } from '../shared/models/Pagination';
 import { StoreParams } from '../shared/models/storeParams';
 import { ApiResponse } from '../shared/models/ApiResponse';
-import { CreateProduct } from '../shared/models/createProduct';
+import { CreateFileAttachment } from '../shared/models/CreateFileAttachment';
 import { Catalog } from '../shared/models/Catalog';
 import { FileAttachment } from '../shared/models/FileAttachment';
 import { Profile } from '../shared/models/Profile';
@@ -14,8 +14,8 @@ import { CreateProfile } from '../shared/models/createProfile';
   providedIn: 'root',
 })
 export class StoreService {
-  private apiUrl = 'https://api-albums.ddns.net/api/v1';
-  // private apiUrl = 'https://localhost:7272/api/v1';
+  // private apiUrl = 'https://api-albums.ddns.net/api/v1';
+  private apiUrl = 'https://localhost:7272/api/v1';
   // private apiUrl = 'http://localhost:5193/api/v1';
   // Inject HttpClient for making HTTP requests
   constructor(private http: HttpClient) { }
@@ -117,19 +117,30 @@ export class StoreService {
   }
 
 
-  uploadToServer(createProduct: CreateProduct): Observable<ApiResponse<Pagination<FileAttachment>>> {
+  uploadToServer(createFileAttachment: CreateFileAttachment): Observable<ApiResponse<Pagination<FileAttachment>>> {
     const formData = new FormData();
-    formData.append('profileId', createProduct.profileId);
-    formData.append('file', createProduct.file);
+    formData.append('profileId', createFileAttachment.profileId);
+    formData.append('file', createFileAttachment.file);
 
-    if (createProduct.latitude && createProduct.longitude) {
-      formData.append('latitude', createProduct.latitude);
-      formData.append('longitude', createProduct.longitude);
+    if (createFileAttachment.latitude && createFileAttachment.longitude) {
+      formData.append('latitude', createFileAttachment.latitude);
+      formData.append('longitude', createFileAttachment.longitude);
     }
     const headers = this.getHeaderAuthorization();
 
     return this.http.post<any>(`${this.apiUrl}/FileAttachment/`, formData, { headers });
   }
 
+  
+  downloadFile(fileName: string, fileUrl: string) {
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: Blob) => {
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = fileName; 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
 
 }

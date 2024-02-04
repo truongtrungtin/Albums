@@ -10,6 +10,8 @@ import { ProductUploadComponent } from './product-upload/product-upload.componen
 import { StoreRoutingModule } from './store-routing.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ProductProfilesComponent } from './product-profiles/product-profiles.component';
+import { ModalImageComponent } from './modal-image/modal-image.component';
+import { ModalVideoComponent } from './modal-video/modal-video.component';
 
 
 
@@ -19,21 +21,26 @@ import { ProductProfilesComponent } from './product-profiles/product-profiles.co
     ProductItemComponent,
     ProductDetailsComponent,
     ProductUploadComponent,
-    ProductProfilesComponent
+    ProductProfilesComponent,
+    ModalImageComponent,
+    ModalVideoComponent
   ],
   imports: [
     CommonModule,
     StoreRoutingModule,
     FormsModule,
     SharedModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
   ],
   exports: [
     StoreComponent,
     ProductItemComponent,
     ProductDetailsComponent,
     ProductUploadComponent,
-    ProductProfilesComponent
+    ProductProfilesComponent,
+    ModalImageComponent,
+    ModalVideoComponent
+
   ]
 })
 export class StoreModule { }

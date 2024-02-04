@@ -1,4 +1,3 @@
-import {Product} from './Product';
 
 export interface Pagination<T> {
     pageIndex: number;

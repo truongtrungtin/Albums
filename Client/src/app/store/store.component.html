@@ -12,8 +12,8 @@
       <h5 class="text-primary ml-3">Profile</h5>
       <ul class="list-group my-3">
         <li class="list-group-item  list-group-item-action" *ngFor="let profile of params.profiles"
-          [class.selected]=" profile.profileId === params.selectedProfile?.profileId"
-          (click)="selectProfile(profile)">
+          [class.selected]=" profile.profileId === params.selectedProfile?.profileId" (click)="selectProfile(profile)"
+          style="background-image: url({{profile.avatar}});">
           {{ profile.profileName }}
         </li>
       </ul>
@@ -85,7 +85,7 @@
         </div>
         <div class="modal-body">
           <!-- Include a form with your custom dropzone component -->
-          <app-product-upload [profiles]="params.profiles" ></app-product-upload>
+          <app-product-upload [profiles]="params.profiles"></app-product-upload>
         </div>
         <div class="modal-footer">
           <button type="button" #closebuttonupload class="btn btn-secondary"

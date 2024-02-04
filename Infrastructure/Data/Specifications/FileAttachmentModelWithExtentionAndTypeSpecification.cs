@@ -1,3 +1,4 @@
+using AutoMapper;
 using Core.Entities;
 using Core.Specifications;
 
@@ -19,13 +20,13 @@ public class FileAttachmentModelWithExtentionAndTypeSpecification : BaseSpecific
         ApplyCriteria(x => x.FileAttachmentId == fileAttachmentId);
 
     }
-    public FileAttachmentModelWithExtentionAndTypeSpecification(Guid createBy, string? sort, string? fileExtention, string? fileType,string? profile, int? skip, int? take)
+    public FileAttachmentModelWithExtentionAndTypeSpecification(Guid createBy, string? sort, string? fileExtention, string? fileType, Guid? profile, int? skip, int? take)
     {
 
         ApplyCriteria(x =>
                     (string.IsNullOrWhiteSpace(fileExtention) || x.FileExtention.ToLower().Contains(fileExtention.ToLower()))
                     && (string.IsNullOrWhiteSpace(fileType) || x.FileType.ToLower().Contains(fileType.ToLower()))
-                    && (string.IsNullOrWhiteSpace(profile) || x.ObjectId == Guid.Parse(profile))
+                    && x.ObjectId == profile
                     && x.CreateBy == createBy
                 ); ;
 
@@ -49,4 +50,3 @@ public class FileAttachmentModelWithExtentionAndTypeSpecification : BaseSpecific
 
     }
 }
-
